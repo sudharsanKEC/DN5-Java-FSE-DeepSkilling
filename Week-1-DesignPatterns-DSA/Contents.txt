@@ -1,0 +1,6 @@
+Engineering Concepts
+The core concepts for any engineering landscape. This is the foundation on which all programming
+languages and frameworks are built.
+Relevant skills:
+• Design Patterns and Principles
+• Data Structures and Algorithms
