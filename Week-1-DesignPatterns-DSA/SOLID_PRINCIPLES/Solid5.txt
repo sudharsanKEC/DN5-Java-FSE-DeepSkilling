@@ -1,0 +1,237 @@
+Dependency Injection (DI)
+      Before understanding Dependency Injection, you must first understand Dependency.
+    What is a Dependency?
+      Suppose you have a service that sends emails.
+          public class EmailService {
+              public void sendEmail(String message) {
+                  System.out.println("Sending Email: " + message);
+              }
+          }
+      Now a user service wants to use it.
+          public class UserService {
+              private EmailService emailService = new EmailService();
+              public void registerUser() {
+                  emailService.sendEmail("Welcome!");
+              }
+          }
+      Here:
+          EmailService
+      is a dependency of UserService
+      because UserService depends on it to perform its work.
+
+What's the Problem?
+    Notice this line:
+        private EmailService emailService = new EmailService();
+    UserService is creating its own dependency.
+    This causes tight coupling.
+        UserService ----> EmailService
+    If tomorrow you want:
+        EmailService
+        SmsService
+        WhatsAppService
+    you must modify UserService.
+    This violates OCP and makes testing harder.
+
+Dependency Injection Idea
+    Instead of creating dependencies yourself:
+      private EmailService emailService = new EmailService();
+    someone else provides them.
+    This is called Dependency Injection.
+        public class UserService {
+            private EmailService emailService;
+            public UserService(EmailService emailService) {
+                this.emailService = emailService;
+            }
+        }
+    Now UserService doesn't create the dependency.
+    It only uses it.
+
+Real World Analogy
+  Imagine you're a driver.
+  Without DI:
+      You buy the car
+      You maintain the car
+      You create the car
+  With DI:
+      Someone gives you a car
+      You simply drive it
+  You focus on your responsibility.
+
+
+In Spring Boot
+    Spring's IoC Container creates objects and injects them where needed.
+    Step 1:
+      Email Service
+          @Service
+          public class EmailService {
+          
+              public void sendEmail(String message) {
+                  System.out.println(message);
+              }
+          }
+
+    Step 2:
+      Inject into UserService
+        @Service
+        public class UserService {
+            private final EmailService emailService;
+            public UserService(EmailService emailService) {
+                this.emailService = emailService;
+            }
+            public void registerUser() {
+                emailService.sendEmail("Welcome");
+            }
+        }
+      
+      What happens internally?
+      Spring sees:
+          @Service
+          public class EmailService
+      and creates an object:
+          EmailService emailService = new EmailService();
+      inside its container.
+      Then it sees:
+          public UserService(EmailService emailService)
+          and injects that object automatically.
+      Conceptually:
+          EmailService emailService = new EmailService();
+          UserService userService = new UserService(emailService);
+      Spring does this for you.
+      Why is it Called Injection?
+          Because the dependency is literally injected into the class.
+            new UserService(emailService);
+          The dependency enters from outside.
+
+Types of Dependency Injection
+    There are three common types.
+    1. Constructor Injection (Recommended)
+    @Service
+    public class UserService {
+        private final EmailService emailService;
+        public UserService(
+        EmailService emailService) {
+            this.emailService = emailService;
+        }
+    }
+    Spring injects through the constructor.
+    Advantages
+        Immutable dependency (final)
+        Easy testing
+        Mandatory dependency
+        Recommended by Spring
+    This is what you should use most of the time.
+
+    2. Setter Injection
+        @Service
+        public class UserService {
+        
+            private EmailService emailService;
+        
+            @Autowired
+            public void setEmailService(
+                    EmailService emailService) {
+        
+                this.emailService = emailService;
+            }
+        }
+      Spring injects using a setter method.
+      Useful for optional dependencies.
+
+3. Field Injection
+      @Service
+      public class UserService {
+          @Autowired
+          private EmailService emailService;
+      }
+      Spring injects directly into the field.
+      Works, but generally discouraged.
+      Problems
+          Harder to test
+          Hidden dependencies
+          Cannot make field final
+
+Why Constructor Injection is Preferred
+    Compare:
+        Field Injection:
+            @Service
+            public class UserService {
+                @Autowired
+                private EmailService emailService;
+            }
+        You cannot immediately see what the class requires.
+
+        Constructor Injection
+            @Service
+            public class UserService {
+                private final EmailService emailService;
+                public UserService(
+                        EmailService emailService) {
+                          this.emailService = emailService;
+                }
+            }
+      The dependency is explicit.
+      Any developer can instantly see:
+      UserService needs EmailService
+
+How DI Helps with Testing
+  Without DI:
+      public class UserService {
+          private EmailService emailService =
+                  new EmailService();
+      }
+  Testing is difficult because you cannot replace the dependency.
+  
+  With DI:
+    public class UserService {
+        private final EmailService emailService;
+        public UserService(
+                EmailService emailService) {
+            this.emailService = emailService;
+        }
+    }
+  
+  You can pass a mock:
+    EmailService mockEmailService =
+            Mockito.mock(EmailService.class);
+    UserService userService =
+            new UserService(mockEmailService);
+    Very easy to test.
+
+Dependency Injection vs Inversion of Control (IoC)
+    These are related but not identical.
+    IoC
+    A principle:
+        The framework controls object creation.
+    DI
+    A technique:
+        The framework provides dependencies to objects.
+    Think:
+      IoC = Big concept
+      DI = One way to achieve IoC
+    In Spring:
+      Spring Container
+              ↓
+      Creates Beans
+              ↓
+      Injects Dependencies
+
+Interview Definition
+    Dependency Injection is a design pattern in which a class receives its dependencies from an external
+    source instead of creating them itself. In Spring Boot, the IoC container creates beans and injects them
+    into dependent classes, reducing coupling and improving testability, maintainability, and flexibility.
+
+Memory Trick
+    Dependency  -> Something a class needs
+    Injection   -> Provided from outside
+
+Dependency Injection
+    = Give a class what it needs,
+      instead of letting it create it.
+
+This is one of the most important concepts in Spring Boot because almost everything (@Service, @Repository, @Controller, @Component, @Autowired) revolves around Dependency Injection and the Spring IoC container.
+
+
+
+
+
+
