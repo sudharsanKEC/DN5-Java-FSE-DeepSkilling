@@ -51,7 +51,7 @@ Problem without SRP
 Applying SRP
     Separate responsibilities. The below is how we should break down the tightly coupled code into achieving the Single Responsibility Principle(SRP).
 
-    Validation:
+    Validation.java:
       @Component
       public class UserValidator {
       
@@ -60,7 +60,7 @@ Applying SRP
           }
       }
 
-    Email Service:
+    EmailService.java:
       @Service
       public class EmailService {
       
@@ -69,7 +69,7 @@ Applying SRP
           }
       }
 
-    JWT Service
+    JWTService.java
       @Service
       public class JwtService {
       
@@ -84,20 +84,115 @@ Applying SRP
               extends JpaRepository<User, Long> {
       }
 
-Now for every logic, we have formed different classes and placed codes only necessary for that specific business needs. So therefore we have successfully achieved the Single Responsibility Principle(SRP).
+Now for every logic, we have formed different classes and placed codes only necessary for that specific business needs.
+So therefore we have successfully achieved the Single Responsibility Principle(SRP).
+
+Now the UserService.java will become:
+        @Service
+        public class UserService {
+        
+            private final UserValidator validator;
+            private final UserRepository userRepository;
+            private final EmailService emailService;
+            private final JwtService jwtService;
+        
+            public UserService(
+                    UserValidator validator,
+                    UserRepository userRepository,
+                    EmailService emailService,
+                    JwtService jwtService) {
+        
+                this.validator = validator;
+                this.userRepository = userRepository;
+                this.emailService = emailService;
+                this.jwtService = jwtService;
+            }
+        
+            public String registerUser(User user) {
+        
+                validator.validate(user);
+        
+                userRepository.save(user);
+        
+                emailService.sendWelcomeEmail(user);
+        
+                return jwtService.generateToken(user);
+            }
+        }
+
+After the SRP modification in our code, now each class has their clear responsibility.
+
+Class	                Responsibility
+UserValidator	  -      Validation
+UserRepository	  -      Database access
+EmailService	  -      Email sending
+JwtService	      -      JWT handling
+UserService	      -      User registration workflow
+
+Advantages:
+    Why this is better?
+            Why is this better?
+                1. Easier Maintenance
+                        Suppose JWT implementation changes.
+                        Earlier:
+                                UserService
+                        needed modification.
+                        Now:
+                            JwtService alone changes.
+                        Nothing else is touched.
+
+                2. Easier Testing
+                        Without SRP:
+                            registerUser()
+                        would test:
+                            validation, database, email, jwt, logging
+                        all together.
+
+                        With SRP:
+                            JwtServiceTest tests JWT only.
+                            EmailServiceTest tests email only.
+                            UserValidatorTest tests validation only.
+                        Much simpler.
+
+                3. Reusability
+                        Suppose later you add: /login endpoint.
+                        JWT generation is already inside:
+                                JwtService
+                        You simply reuse it.
+                            jwtService.generateToken(user);
+                        No duplication.
 
 
+Note:
+    Many people say: "One method per class" or "one function per class."
+    That is not SRP. A class can have many methods and still follow SRP.
+    Example:
+        @Service
+        public class JwtService {
+            public String generateToken(User user) {}
+            public boolean validateToken(String token) {}
+            public String extractUsername(String token) {}
+        }
+    This class has 3 methods. Yet it follows SRP because all methods are related to JWT management.
+    There is only one reason to change: JWT handling requirements changed.
 
+How to identify SRP violations
+Ask yourself:
+    "How many independent reasons could force me to modify this class?"
+    If the answer is:
+        Validation rules, Database changes, Email changes, JWT changes, Logging changes
+    then SRP is violated.
+    If the answer is:
+        JWT requirements changed
+    then SRP is likely being followed.
 
-
-
-
-
-
-
-
-
-
-
+Simple Rule
+    In Spring Boot, a good sign of SRP is when classes naturally fit into roles such as:
+        Controller → Handle HTTP requests
+        Service → Business workflow
+        Repository → Database access
+        Validator → Validation
+        EmailService → Email operations
+        JwtService → JWT operations
 
 
