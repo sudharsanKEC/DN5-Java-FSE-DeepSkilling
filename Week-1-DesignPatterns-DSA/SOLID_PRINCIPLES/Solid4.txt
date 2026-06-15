@@ -1,0 +1,235 @@
+Interface Segregation Principle (ISP)
+
+Definition:
+    Clients should not be forced to depend upon interfaces they do not use.
+    This is the I in SOLID.
+In simple terms:
+    Don't create large "god interfaces" containing methods that some implementations don't need.
+Instead:
+    Create smaller, focused interfaces.
+    Why do we need ISP?
+      Imagine you're building a social media platform.
+      You create a single interface:
+          public interface UserOperations {
+              void createPost();
+              void comment();
+              void sendMessage();
+              void livestream();
+          }
+      Looks okay at first.
+      Now suppose you have two types of users:
+          Regular User
+          Can:
+            Create posts
+            Comment
+            Send messages
+          Cannot:
+              Livestream
+              Creator User
+          Can do everything.
+
+Let's implement RegularUser:
+        public class RegularUser
+                implements UserOperations {
+        
+            @Override
+            public void createPost() {
+            }
+        
+            @Override
+            public void comment() {
+            }
+        
+            @Override
+            public void sendMessage() {
+            }
+        
+            @Override
+            public void livestream() {
+        
+                throw new UnsupportedOperationException(
+                        "Regular users cannot livestream");
+            }
+        }
+        Notice the problem?
+          The interface forced RegularUser to implement:
+                livestream()
+          even though it doesn't support livestreaming.
+        ISP violated.
+
+Why is this bad?
+    The class is forced to depend on functionality it doesn't need.
+    This often leads to:
+        throw new UnsupportedOperationException();
+        or
+        // empty implementation
+    which is a strong sign of bad design.
+
+ISP Solution
+    Split the large interface into smaller interfaces.
+
+    Basic User Operations:
+        public interface BasicUserOperations {
+            void createPost();
+            void comment();
+            void sendMessage();
+        }
+
+    Livestream Capability:
+          public interface LivestreamCapable {
+              void livestream();
+          }
+
+    Regular User
+          public class RegularUser
+                  implements BasicUserOperations {
+              @Override
+              public void createPost() {
+              }
+              @Override
+              public void comment() {
+              }
+              @Override
+              public void sendMessage() {
+              }
+          }
+
+    Creator User
+        public class CreatorUser
+                implements BasicUserOperations,
+                           LivestreamCapable {
+            @Override
+            public void createPost() {
+            }
+            @Override
+            public void comment() {
+            }
+            @Override
+            public void sendMessage() {
+            }
+            @Override
+            public void livestream() {
+            }
+        }
+      Now each class implements only what it actually needs.
+      ISP satisfied.
+
+Relationship Between ISP and LSP
+    These two principles are closely connected.
+    Suppose:
+        public interface Bird {
+            void fly();
+        }
+    Then:
+        public class Penguin
+          implements Bird {
+              @Override
+              public void fly() {
+                  throw new UnsupportedOperationException();
+              }
+        }
+    This is:
+        LSP violation (Penguin can't substitute Bird properly) 
+        and also
+        ISP violation (Penguin is forced to implement something it doesn't need)
+        A better design would be:
+          public interface FlyingBird {
+              void fly();
+          }
+        Now only flying birds implement it.
+
+    Imagine a company employee interface:
+        public interface Employee {
+            void writeCode();
+            void designUI();
+            void manageTeam();
+            void testSoftware();
+            void deployApplication();
+        }
+    Now every employee must implement everything:
+        Developer
+        Tester
+        Manager
+        Designer
+    Makes no sense.
+
+    Instead:
+      Developer
+          -> writeCode(), deploy()
+      Tester
+          -> testSoftware()
+      Manager
+          -> manageTeam()
+      Designer
+          -> designUI()
+      Each role gets only the methods it needs.
+      That's ISP.
+
+    How to Detect ISP Violations
+      Look for implementations containing:
+        throw new UnsupportedOperationException();
+        or
+        // Not applicable
+        or
+        // empty method
+      Example:
+        @Override
+        public void livestream() {
+            throw new UnsupportedOperationException();
+        }
+      This usually means:
+          The interface is too large and should be split.
+
+      Difference Between OCP and ISP
+          Many beginners confuse these.
+          OCP
+              Focuses on:
+                Adding new behavior without modifying existing code.
+              Example:
+                PaymentProcessor
+              Add:
+                UpiPaymentProcessor
+                CardPaymentProcessor
+                PaypalPaymentProcessor
+              without changing existing classes.
+
+          ISP
+              Focuses on:
+                Making sure classes are not forced to implement methods they don't need.
+              Example:
+                BasicUserOperations
+                LivestreamCapable
+              instead of one huge interface.
+
+One Liner answer/explantion:
+      Interface Segregation Principle states that no class should be forced to implement methods it does not 
+      need. Large interfaces should be split into smaller, more specific interfaces so that implementations 
+      depend only on the functionality they actually use.
+
+A simple memory trick:
+    SRP -> One responsibility
+    OCP -> Extend without modifying
+    LSP -> Child behaves like Parent
+    ISP -> Don't force unused methods
+Notice something interesting:
+    When you see code like:
+      @Override
+      public void someMethod() {
+          throw new UnsupportedOperationException();
+      }
+  it's often a sign that either ISP, LSP, or both are being violated. That's why these principles tend to reinforce each other.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
