@@ -63,12 +63,143 @@ Later:
       Now an existing feature stops working.
       The more you modify old code, the higher the risk of introducing bugs.
 
+OCP Solution
+      Use abstraction.
+
+      Create an interface.
+      public interface NotificationSender {
+          void send(String message);
+      }
+
+      Email Implementation
+            @Component
+            public class EmailNotificationSender
+                    implements NotificationSender {
+                @Override
+                public void send(String message) {
+                    System.out.println("Sending Email: " + message);
+                }
+            }
+
+      SMS Implementation
+            @Component
+            public class SmsNotificationSender
+                    implements NotificationSender {
+                @Override
+                public void send(String message) {
+                    System.out.println("Sending SMS: " + message);
+                }
+            }
+
+      Now existing code does not need modification.
+      When a new notification type is needed:
+            @Component
+            public class WhatsAppNotificationSender
+                    implements NotificationSender {
+                @Override
+                public void send(String message) {
+                    System.out.println("Sending WhatsApp: " + message);
+                }
+            }
+            We extend the system by creating a new class.
+            We do not modify existing classes. This follows OCP.
 
 
+Real Spring Boot Example: Payment System
+            Imagine an e-commerce application.
+            Bad Design:
+                  @Service
+                  public class PaymentService {
+                  
+                      public void processPayment(String method) {
+                  
+                          if(method.equals("CARD")) {
+                              // card payment
+                          }
+                          else if(method.equals("UPI")) {
+                              // upi payment
+                          }
+                      }
+                  }
+            
+            Business says:
+                  Add PayPal.
+                  You edit the service.
+            Later:
+                  Add Stripe.
+                  Edit again.
+            OCP violation.
 
+            Good Design
+                  Interface
+                        public interface PaymentProcessor {                  
+                            void pay(double amount);
+                        }
+                  UPI
+                        @Component
+                        public class UpiPaymentProcessor
+                                implements PaymentProcessor {
+                        
+                            @Override
+                            public void pay(double amount) {
+                                System.out.println("UPI Payment");
+                            }
+                        }
+                  Card
+                        @Component
+                        public class CardPaymentProcessor
+                                implements PaymentProcessor {
+                        
+                            @Override
+                            public void pay(double amount) {
+                                System.out.println("Card Payment");
+                            }
+                        }
+                  PayPal
+                        @Component
+                        public class PaypalPaymentProcessor
+                                implements PaymentProcessor {
+                        
+                            @Override
+                            public void pay(double amount) {
+                                System.out.println("PayPal Payment");
+                            }
+                        }
+                  
+                  Adding PayPal did not require changing:
+                              CardPaymentProcessor
+                              UpiPaymentProcessor
+                  Only a new implementation was added.
 
-
-
+Relation Between SRP and OCP
+      These principles often work together.
+      SRP
+            Asks:
+                  Does this class have only one reason to change?
+      OCP
+            Asks:
+                  Can I add new functionality without modifying existing code?
+      Example:
+            JwtService
+                  follows SRP because it only handles JWT operations.
+            PaymentProcessor
+                  with multiple implementations follows OCP because new payment methods can be added without changing existing code.
+      
+      How to Identify OCP Violations
+            Whenever you see code like:
+                  if(type.equals(...))
+                  or
+                  switch(type)
+            that keeps growing whenever a new feature is added, ask yourself:
+                  "Will I have to edit this class every time a new requirement appears?"
+            If the answer is yes, OCP is probably being violated.
+      Example:
+            if(paymentType.equals("UPI"))
+            if(paymentType.equals("CARD"))
+            if(paymentType.equals("PAYPAL"))
+            if(paymentType.equals("STRIPE"))
+            if(paymentType.equals("APPLE_PAY"))
+      This is usually a sign that polymorphism (interfaces + implementations) would be a better design.
 
 
 
