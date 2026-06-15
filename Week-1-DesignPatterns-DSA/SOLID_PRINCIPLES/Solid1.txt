@@ -1,0 +1,103 @@
+The 'S' in SOLID stands for the Single Responsibility Principle(SRP).
+
+SRP:
+    The Single Responsibility Principle (SRP) states that a class should have one, and only one, reason to change.
+    In other words, a class should do exactly one job. If a class has multiple responsibilities, those responsibilities become coupled. A change to one responsibility can unexpectedly break or modify the behavior of the other responsibilities.
+
+    A class should be responsible for only one part of the application's functionality, so it should change for only one business reason.
+
+Let us see an example along with Java(Spring boot):
+    Imagine you're building a social media application.
+
+You create a service like this:
+      @Service
+      public class UserService {
+        public void registerUser(User user) {
+          // validate user
+    
+          // save user to database
+
+          // send welcome email
+
+          // generate JWT token
+
+          // log registration activity
+        }
+      }
+  
+    At first glance, it looks fine. But think about it.
+    This class can change because:
+        Validation rules changed.
+        Database logic changed.
+        Email format changed.
+        JWT generation changed.
+        Logging strategy changed.
+So there are 5 different independent reasons for this class to change.
+
+Problem without SRP
+    Suppose the company says:
+        "Change the welcome email template."
+      You modify the email code inside UserService. Now you accidentally break user registration logic.
+      Why?
+          Because everything is tightly coupled in one class.
+      This causes:
+          Difficult maintenance
+          Difficult testing
+          Difficult debugging
+          Higher chance of bugs
+      This violates SRP.
+
+
+Applying SRP
+    Separate responsibilities. The below is how we should break down the tightly coupled code into achieving the Single Responsibility Principle(SRP).
+
+    Validation:
+      @Component
+      public class UserValidator {
+      
+          public void validate(User user) {
+              // validation logic
+          }
+      }
+
+    Email Service:
+      @Service
+      public class EmailService {
+      
+          public void sendWelcomeEmail(User user) {
+              // email logic
+          }
+      }
+
+    JWT Service
+      @Service
+      public class JwtService {
+      
+          public String generateToken(User user) {
+              return "jwt-token";
+          }
+      }
+
+    User Repository
+      @Repository
+      public interface UserRepository
+              extends JpaRepository<User, Long> {
+      }
+
+Now for every logic, we have formed different classes and placed codes only necessary for that specific business needs. So therefore we have successfully achieved the Single Responsibility Principle(SRP).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
