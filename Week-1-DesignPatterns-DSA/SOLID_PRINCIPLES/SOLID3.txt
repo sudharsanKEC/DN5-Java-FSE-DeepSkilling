@@ -1,0 +1,140 @@
+Liskov Substitution Principle:
+    Objects of a subclass should be able to replace objects of their superclass without breaking the correctness of the program.
+    This is the L in SOLID.
+    In simple terms:
+        If class B extends class A, then anywhere we use A, we should be able to use B without unexpected behavior.
+
+Why do we need LSP?
+        Inheritance creates an "is-a" relationship.
+        For example:
+            Dog is an Animal
+            Cat is an Animal
+            Car is NOT an Animal
+        When inheritance is used correctly:
+            Animal animal = new Dog();
+        should work exactly as expected.
+        If replacing Animal with Dog breaks the program, then inheritance was designed incorrectly.
+        A Correct Example
+        public class Bird {
+            public void eat() {
+                System.out.println("Bird is eating");
+            }
+        }
+        public class Sparrow extends Bird {
+        }
+      Now:
+        Bird bird = new Sparrow();
+        bird.eat();
+      Output:
+        Bird is eating
+        No problems.
+      Sparrow can substitute Bird.
+      LSP satisfied.
+
+
+The Classic LSP Violation
+        People often create:
+            public class Bird {
+                public void fly() {
+                    System.out.println("Flying");
+                }
+            }
+        Then:
+            public class Sparrow extends Bird {
+            }
+        and
+            public class Penguin extends Bird {
+            }
+        Looks reasonable.
+        Now:
+            Bird bird = new Sparrow();
+            bird.fly();
+        Works.
+        But:
+            Bird bird = new Penguin();
+            bird.fly();
+        Problem!
+        Penguins cannot fly.
+        Many developers write:
+            public class Penguin extends Bird {
+                @Override
+                public void fly() {
+                    throw new UnsupportedOperationException();
+                }
+            }
+        Now:
+            Bird bird = new Penguin();
+            bird.fly();
+        throws an exception.
+        The program breaks.
+    LSP violated.
+
+Why is it a violation?
+        The parent class promised:
+            bird.fly();
+        is valid.
+        But the child class says:
+            Nope, I can't do that.
+        So the child is no longer a proper substitute for the parent.
+        This breaks the contract established by the parent class.
+
+Better Design
+    Instead of:
+        Bird
+         ├── Sparrow
+         └── Penguin
+    Create:
+        Bird
+         ├── FlyingBird
+         │     └── Sparrow
+         │
+         └── Penguin
+
+Base Bird
+        public abstract class Bird {
+            public abstract void eat();
+        }
+
+FlyingBird
+        public abstract class FlyingBird
+                extends Bird {
+            public abstract void fly();
+        }
+
+Sparrow
+        public class Sparrow
+                extends FlyingBird {
+            @Override
+            public void eat() {
+            }
+            @Override
+            public void fly() {
+                System.out.println("Flying");
+            }
+        }
+
+Penguin
+        public class Penguin
+                extends Bird {
+            @Override
+            public void eat() {
+            }
+        }
+
+        Now no one expects a Penguin to fly.
+        LSP satisfied.
+
+
+The Real Meaning of LSP
+    Many developers think:
+        "LSP is about inheritance."
+    Not exactly.
+    It's about behavioral compatibility.
+    The child must honor the contract of the parent.
+
+
+
+
+
+
+
