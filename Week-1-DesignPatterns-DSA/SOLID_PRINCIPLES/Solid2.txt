@@ -1,0 +1,85 @@
+Open/Closed Principle (OCP)
+      Definition:
+        Software entities (classes, methods, modules, etc.) should be open for extension but closed for modification.
+      This means:
+        You should be able to add new behavior.
+        Without changing existing tested code.
+
+Why do we need OCP?
+    Imagine your social media application supports notifications. Initially, you only support Email notifications.
+        public class NotificationService {
+            public void sendNotification(String type, String message) {
+                if(type.equals("EMAIL")) {
+                    System.out.println("Sending Email: " + message);
+                }
+            }
+        }
+    Works fine.
+
+Later, the business says:
+      Add SMS notifications.
+      You modify the class:
+          public class NotificationService {
+              public void sendNotification(String type, String message) {
+                  if(type.equals("EMAIL")) {
+                      System.out.println("Sending Email: " + message);
+                  }
+                  else if(type.equals("SMS")) {
+                      System.out.println("Sending SMS: " + message);
+                  }
+              }
+          }
+      Again works.
+
+Later:
+      Add WhatsApp notifications.
+      public class NotificationService {
+          public void sendNotification(String type, String message) {
+              if(type.equals("EMAIL")) {
+                  // email
+              }
+              else if(type.equals("SMS")) {
+                  // sms
+              }
+              else if(type.equals("WHATSAPP")) {
+                  // whatsapp
+              }
+          }
+      }
+      Again works.
+  
+    But notice something. Every time a new notification type is added:
+      Email  -> Modify class
+      SMS    -> Modify class
+      WhatsApp -> Modify class
+      Push Notification -> Modify class
+    The class is constantly changing. This violates OCP.
+  
+
+    Problems Without OCP:
+      Suppose the notification service is already tested and deployed.
+      Now you add WhatsApp support.
+      While modifying the class, you accidentally break Email notifications.
+      Now an existing feature stops working.
+      The more you modify old code, the higher the risk of introducing bugs.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
