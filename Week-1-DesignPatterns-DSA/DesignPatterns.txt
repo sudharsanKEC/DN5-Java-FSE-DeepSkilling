@@ -1,0 +1,26 @@
+SOLID Principles
+├── SRP
+├── OCP
+├── LSP
+├── ISP
+└── DIP
+
+Design Patterns
+├── Creational
+│   ├── Singleton
+│   ├── Factory Method
+│   └── Builder
+│
+├── Structural
+│   ├── Adapter
+│   ├── Decorator
+│   └── Proxy
+│
+├── Behavioral
+│   ├── Observer
+│   ├── Strategy
+│   └── Command
+│
+└── Architectural
+    ├── MVC
+    └── Dependency Injection
