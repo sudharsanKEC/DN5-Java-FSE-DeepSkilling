@@ -1,3 +1,108 @@
+Dependency Inversion principle(DIP):
+      Dependency Inversion Principle (DIP)
+      Definition
+            The Dependency Inversion Principle (DIP) is the "D" in the SOLID principles.
+            It states:
+                  High-level modules should not depend on low-level modules. Both should depend on abstractions.
+                  Abstractions should not depend on details. Details should depend on abstractions.
+
+      Key Terms
+            High-Level Module
+                  Contains business logic and application rules.
+            Example:
+                  public class UserService {
+                      // Business logic
+                  }
+
+            Low-Level Module
+                  Performs specific implementation details.
+                  Example:
+                        public class EmailNotificationService {
+                            // Sends email
+                        }
+
+            Abstraction
+                  Usually an interface that defines a contract.
+                  Example:
+                        public interface NotificationService {
+                            void send(String message);
+                        }
+
+            Problem Without DIP
+                  public class UserService {
+                        private EmailNotificationService emailService = new EmailNotificationService();
+                        public void registerUser() {
+                                emailService.send("Welcome");
+                        }
+                  }
+            Issues
+                  Tight coupling between classes.
+                  Difficult to replace email with SMS or Push notifications.
+                  Harder to test.
+                  Changes in low-level modules may affect high-level modules.
+
+            Solution Using DIP
+                  public interface NotificationService {
+                      void send(String message);
+                  }
+
+                  public class EmailNotificationService
+                          implements NotificationService {
+                  
+                      @Override
+                      public void send(String message) {
+                          System.out.println("Email sent");
+                      }
+                  }
+
+                  public class UserService {
+                  
+                      private final NotificationService notificationService;
+                  
+                      public UserService(NotificationService notificationService) {
+                          this.notificationService = notificationService;
+                      }
+                  
+                      public void registerUser() {
+                          notificationService.send("Welcome");
+                      }
+                  }
+
+      Where Is the Dependency Inverted?
+            Before DIP
+                        UserService
+                              ↓
+                        EmailNotificationService
+                  High-level module depends directly on low-level module.
+            After DIP
+                        UserService
+                              ↓
+                        NotificationService
+                              ↑
+                        EmailNotificationService
+                  Both classes depend on the abstraction.
+            The dependency direction is reversed (inverted), which is why it is called Dependency Inversion Principle.
+
+      Benefits of DIP
+            1. Loose Coupling
+                  High-level modules are not tied to specific implementations.
+            2. Easy to Extend
+                  New implementations can be added without modifying existing business logic.
+                  Example:
+                        public class SmsNotificationService
+                                implements NotificationService {
+                        }
+                  UserService remains unchanged.
+            3. Better Testability
+                  Mock implementations can be injected during testing.
+                  public class MockNotificationService
+                          implements NotificationService {
+                  }
+            4. Improved Maintainability
+                  Changes in implementation details do not affect business logic.
+
+
+
 Dependency Injection (DI)
       Before understanding Dependency Injection, you must first understand Dependency.
     What is a Dependency?
@@ -229,6 +334,60 @@ Dependency Injection
       instead of letting it create it.
 
 This is one of the most important concepts in Spring Boot because almost everything (@Service, @Repository, @Controller, @Component, @Autowired) revolves around Dependency Injection and the Spring IoC container.
+
+| Dependency Inversion Principle | Dependency Injection               |
+| ------------------------------ | ---------------------------------- |
+| Design Principle               | Implementation Technique           |
+| Tells what design to follow    | Tells how to provide dependencies  |
+| Part of SOLID                  | Design Pattern / Framework Feature |
+| Depends on abstractions        | Injects implementations            |
+
+
+Question: The dependency Injection is indeed called as the dependency Inversion principle?
+Answer:
+      Not exactly.
+      They are related, but they are not the same thing.
+      Dependency Inversion Principle (DIP)
+            This is the "D" in SOLID.
+            It states:
+                  High-level modules should not depend on low-level modules. Both should depend on abstractions.
+            and
+                  Abstractions should not depend on details. Details should depend on abstractions.
+      
+      Relationship
+            Think of it like this:
+                  | Concept                        | What it is                                                           |
+                  | ------------------------------ | -------------------------------------------------------------------- |
+                  | Dependency Inversion Principle | A design principle (SOLID)                                           |
+                  | Dependency Injection           | A technique/pattern used to achieve that principle                   |
+                  | Spring IoC Container           | A framework feature that performs dependency injection automatically |
+                  
+So when Spring does:
+            @Service
+            public class UserService {
+                private final NotificationService notificationService;
+                public UserService(NotificationService notificationService) {
+                    this.notificationService = notificationService;
+                }
+            }
+      Spring is performing Dependency Injection, which helps your code follow the Dependency Inversion Principle.
+      A simple way to remember:
+            DIP tells you WHAT kind of design you should have.
+            DI is HOW you commonly implement that design.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
