@@ -1,0 +1,139 @@
+Before learning the 23 patterns, it's important to understand why GoF grouped them into these 3 categories.
+  Think of building a house:
+    First, you need to create objects → Creational
+    Then, you need to connect and organize objects → Structural
+    Finally, those objects need to communicate and work together → Behavioral
+
+1. Creational Patterns
+    Main Question:
+        "How should objects be created?"
+    These patterns deal with object creation.
+    Instead of creating objects directly using new, they provide more flexible ways to create them.
+    Example
+      Without a pattern:
+          User user = new User();
+      With a pattern:
+          User user = UserFactory.createUser();
+    Now the creation logic is centralized and can change without affecting the rest of the code.
+
+Why do we need them?
+    Imagine today you create:
+        new MySQLDatabase();
+    Tomorrow your company decides to use PostgreSQL.
+    Without a creational pattern:
+        new PostgreSQLDatabase();
+    You may need to change code everywhere.
+    With a creational pattern, only the creation logic changes.
+
+Real-Life Analogy
+    A car factory.
+    You don't assemble the car yourself.
+    You simply say:
+        Car car = factory.createCar();
+    The factory handles the complicated creation process.
+
+GoF Creational Patterns
+    Singleton
+    Factory Method
+    Abstract Factory
+    Builder
+    Prototype
+
+
+2. Structural Patterns
+        Main Question:
+              "How should objects be connected and organized?"
+        These patterns focus on the structure of classes and objects.
+        Once objects are created, we need to decide:
+            Who talks to whom?
+            How are objects combined?
+            How can incompatible classes work together?
+        Example
+          Suppose you have:
+              class EmailService
+              and
+              class SmsService
+          But your code expects:
+              NotificationService
+          An Adapter can make them work together without changing existing code.
+      
+        Real-Life Analogy
+            A USB adapter.
+        Your laptop has:
+            USB-C
+        Your device has:
+            USB-A
+        The adapter connects them.
+        The adapter doesn't create either device.
+        It only helps them work together.
+    
+    What Structural Patterns Do
+    They help:
+        Combine objects
+        Wrap objects
+        Hide complexity
+        Add functionality
+        Create relationships
+
+    GoF Structural Patterns
+        Adapter
+        Bridge
+        Composite
+        Decorator
+        Facade
+        Flyweight
+        Proxy
+
+3. Behavioral Patterns
+      Main Question:
+          "How should objects communicate and collaborate?"
+             These patterns focus on the behavior of objects.
+          Once objects exist and are connected:
+              How do they interact?
+              How do they exchange responsibilities?
+              How do they react to events?
+          Example
+              Suppose you have:
+                  PaymentService
+              and payment can happen through:
+                  Credit Card
+                  UPI
+                  PayPal
+      
+      Instead of writing:
+            if(paymentType.equals("UPI"))
+            everywhere, a Strategy Pattern allows selecting behavior dynamically.
+      
+      Real-Life Analogy
+            A team in a company.
+            The employees already exist.
+            The office structure already exists.
+      Now the question is:
+            Who performs what task?
+            How do they communicate?
+            How does information flow?
+      That's behavioral design.
+
+      What Behavioral Patterns Do
+      They help:
+          Pass requests
+          Define algorithms
+          Handle events
+          Manage state changes
+          Coordinate object communication
+      
+      GoF Behavioral Patterns
+          Chain of Responsibility
+          Command
+          Interpreter
+          Iterator
+          Mediator
+          Memento
+          Observer
+          State
+          Strategy
+          Template Method
+          Visitor
+
+
+
