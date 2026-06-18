@@ -188,17 +188,35 @@ Singleton in Spring Boot
       and shares it everywhere.
 
 When you write:
-      @Autowired
-      private UserService userService;
+          @Autowired
+          private UserService userService;
       in multiple classes,
       Spring injects the same object.
       This is basically Singleton Pattern managed by Spring.
 
+Single line answer:
+        Singleton is a creational design pattern that ensures only one instance of a class exists throughout the application and provides a global access point to that instance. It is commonly used for loggers, configuration managers, caches, and Spring beans.
 
+Use Cases
+        Logger
+        Configuration Manager
+        Cache Manager
+        Database Connection Manager
+        Spring Singleton Beans
+Key Components
+        Private Constructor
+        Static Instance Variable
+        Public Static getInstance() Method
+Advantages
+        Saves memory
+        Centralized control
+        Shared resource management
+        Prevents unnecessary object creation
+Disadvantages
+        Global state can make testing difficult
+        Thread safety must be handled carefully
 
-
-
-
+A small correction to something you'll often hear: a "database connection" itself is usually not implemented as a Singleton in modern applications. Instead, a connection pool manager or DataSource is typically the Singleton, while individual connections are created and managed by the pool. This distinction is worth to know.
 
 
 
