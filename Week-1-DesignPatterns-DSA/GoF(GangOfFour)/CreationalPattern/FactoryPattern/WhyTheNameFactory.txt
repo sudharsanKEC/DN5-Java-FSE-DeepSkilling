@@ -1,0 +1,75 @@
+Why is it called a "Factory"?
+    Think about a real factory.
+    A car factory:
+        Raw Materials
+              ↓
+        Car Factory
+              ↓
+        Cars
+    You don't care how the factory builds the car.
+    You simply ask:
+        Give me a BMW
+        and receive a BMW.
+    Or:
+      Give me a Tesla
+      and receive a Tesla.
+    The factory's responsibility is:
+        Create and return objects.
+    In software, a "factory" is simply a class or method whose job is to create objects.
+
+Why "Factory Method"?
+      Because the factory is represented by a method.
+      Example:
+          public Notification createNotification() {
+              return new EmailNotification();
+          }
+      This method manufactures objects.
+      Hence:
+          Factory + Method
+          =
+          Factory Method
+      The method acts like a mini factory.
+
+Where is the factory in our example?
+    Look carefully:
+          public abstract class NotificationCreator {
+              public abstract Notification createNotification();
+          }
+    This method:
+          createNotification()
+    is the factory.
+    It creates Notification objects.
+    Concrete creators decide what gets produced:
+        public class EmailNotificationCreator
+                extends NotificationCreator {
+            @Override
+            public Notification createNotification() {
+                return new EmailNotification();
+            }
+        }
+    This factory produces EmailNotification.
+    Another factory:
+        public class SmsNotificationCreator
+                extends NotificationCreator {
+            @Override
+            public Notification createNotification() {
+                return new SmsNotification();
+            }
+        }
+    This factory produces SmsNotification.
+
+Note: Simple Factory is not an official GoF design pattern(For SFvsFM).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
