@@ -1,0 +1,23 @@
+Difference between Simple Factory and Factory Method
+Simple Factory:
+    public class NotificationFactory {
+        public static Notification create(String type) {
+            if(type.equals("EMAIL"))
+                return new EmailNotification();
+            return new SmsNotification();
+        }
+    }
+Usage:
+    Notification notification =
+            NotificationFactory.create("EMAIL");
+    One class decides everything.
+
+Factory Method:
+
+    NotificationCreator creator =
+            new EmailNotificationCreator();
+    Notification notification =
+            creator.createNotification();
+
+  Creation responsibility is delegated to subclasses.
+
