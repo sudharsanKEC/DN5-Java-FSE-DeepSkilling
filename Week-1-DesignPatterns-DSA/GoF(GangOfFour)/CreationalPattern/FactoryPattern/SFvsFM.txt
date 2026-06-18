@@ -1,5 +1,6 @@
 Difference between Simple Factory and Factory Method
 Simple Factory:
+    (Note: This is usually not considered as a pattern, we are just referring it with the name Simple Factory)
     public class NotificationFactory {
         public static Notification create(String type) {
             if(type.equals("EMAIL"))
