@@ -1,0 +1,230 @@
+Singleton Pattern
+    Singleton Pattern ensures that only one object of a class is created throughout the application's lifecycle and provides a global access point to that object.
+
+Why Do We Need It?
+    Imagine a class:
+        public class DatabaseConnection {
+        }
+    Anyone can create objects:
+        DatabaseConnection db1 = new DatabaseConnection();
+        DatabaseConnection db2 = new DatabaseConnection();
+        DatabaseConnection db3 = new DatabaseConnection();
+    Now we have 3 objects.
+    But what if creating multiple objects is unnecessary or dangerous?
+    Examples:
+        Database Connection Manager
+        Logger
+        Configuration Manager
+        Cache Manager
+        Thread Pool Manager
+    For such cases, we want:
+        DatabaseConnection db1 = DatabaseConnection.getInstance();
+        DatabaseConnection db2 = DatabaseConnection.getInstance();
+    Both variables should point to the same object.
+
+Real Life Example
+    Think of the CEO of a company.
+    A company should have only one CEO.
+    Wrong:
+        CEO 1
+        CEO 2
+        CEO 3
+    Correct:
+        One CEO
+        Many employees can access him
+    Singleton follows the same idea.
+
+Characteristics of Singleton
+    A Singleton class:
+        1. Has a private constructor
+            So nobody can create objects using:
+              new Singleton();
+            If tried so, then it will throw an error.
+        2. Has a static instance variable
+            Stores the only object.
+        3. Has a public static method
+            Provides access to that object.
+
+Basic Singleton Implementation
+      public class Singleton {
+          private static Singleton instance;
+          private Singleton() {
+              System.out.println("Object Created");
+          }
+          public static Singleton getInstance() {
+              if(instance == null) {
+                  instance = new Singleton();
+              }
+              return instance;
+          }
+      }
+      
+Usage:
+      public class Main {
+          public static void main(String[] args) {
+              Singleton s1 = Singleton.getInstance();
+              Singleton s2 = Singleton.getInstance();
+              System.out.println(s1 == s2);
+          }
+      }
+Output:
+      Object Created
+      true
+Notice:
+      Singleton s1 = Singleton.getInstance();
+      Singleton s2 = Singleton.getInstance();
+Only one object is created.
+
+How It Works Internally
+    First call:
+        Singleton.getInstance();
+    instance is:
+        null
+    So:
+      instance = new Singleton();
+    Object gets created.
+
+Second call:
+      Singleton.getInstance();
+    instance is NOT null.
+    Therefore:
+        return instance;
+    Existing object is returned.
+    No new object.
+
+Real-World Example: Logger
+      Suppose every class in the application wants to log messages.
+      Wrong approach:
+          new Logger();
+          new Logger();
+          new Logger();
+      Many logger objects.
+
+Singleton approach:
+        Logger logger = Logger.getInstance();
+    Everyone shares the same logger.
+
+Example:
+    public class Logger {
+          private static Logger instance;
+          private Logger() {
+          }
+          public static Logger getInstance() {
+            if(instance == null) {
+                instance = new Logger();
+            }
+            return instance;
+          }
+          public void log(String message) {
+              System.out.println(message);
+          }
+    }
+
+Usage:
+    Logger logger1 = Logger.getInstance();
+    Logger logger2 = Logger.getInstance();
+    logger1.log("Application Started");
+    System.out.println(logger1 == logger2);
+Output:
+    Application Started
+    true
+
+Problem with Basic Singleton
+      Suppose two threads execute:
+          getInstance()
+      at exactly the same time.
+      Thread-1 sees:
+          instance == null
+      Thread-2 also sees:
+          instance == null
+      Both create objects.
+      Now Singleton is broken.
+
+Thread-Safe Singleton
+        public class Singleton {
+            private static Singleton instance;
+            private Singleton() {
+            }
+            public static synchronized Singleton getInstance() {
+                if(instance == null) {
+                    instance = new Singleton();
+                }
+                return instance;
+            }
+        }
+    Now only one thread can execute:
+        getInstance()
+    at a time.
+
+Better Version (Eager Initialization)
+        public class Singleton {
+            private static final Singleton INSTANCE = new Singleton();
+            private Singleton() {
+            }
+            public static Singleton getInstance() {
+                return INSTANCE;
+            }
+        }
+    Object is created immediately when the class loads.
+    Advantages:
+        Simple
+        Thread-safe
+        Most interviewers like this explanation
+    Disadvantage:
+        Object is created even if never used.
+
+Singleton can be created using Enums also. Refer that later.
+
+Singleton in Spring Boot
+      This is the most important interview point.
+      Most Spring Beans are Singleton by default.
+      Example:
+        @Service
+        public class UserService {
+        }
+      
+      Spring creates:
+          Only one UserService object
+      and shares it everywhere.
+
+When you write:
+          @Autowired
+          private UserService userService;
+      in multiple classes,
+      Spring injects the same object.
+      This is basically Singleton Pattern managed by Spring.
+
+Single line answer:
+        Singleton is a creational design pattern that ensures only one instance of a class exists throughout the application and provides a global access point to that instance. It is commonly used for loggers, configuration managers, caches, and Spring beans.
+
+Use Cases
+        Logger
+        Configuration Manager
+        Cache Manager
+        Database Connection Manager
+        Spring Singleton Beans
+Key Components
+        Private Constructor
+        Static Instance Variable
+        Public Static getInstance() Method
+Advantages
+        Saves memory
+        Centralized control
+        Shared resource management
+        Prevents unnecessary object creation
+Disadvantages
+        Global state can make testing difficult
+        Thread safety must be handled carefully
+
+A small correction to something you'll often hear: a "database connection" itself is usually not implemented as a Singleton in modern applications. Instead, a connection pool manager or DataSource is typically the Singleton, while individual connections are created and managed by the pool. This distinction is worth to know.
+
+
+
+
+
+
+
+
+
+
+
