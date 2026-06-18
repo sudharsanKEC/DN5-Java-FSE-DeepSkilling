@@ -1,0 +1,159 @@
+What is Factory Method Pattern?
+    Factory Method Pattern is a Creational Design Pattern that provides an interface (or abstract method) for creating objects, but lets subclasses decide which concrete object to create.
+Instead of writing:
+    Notification notification = new EmailNotification();
+  you write:
+    Notification notification = createNotification();
+  and let the subclass decide what object should be created.
+
+=============================================================================================================================================================================================
+Problem Without Factory Method
+    Imagine you're building a notification system.
+        public interface Notification {
+            void send();
+        }
+    Concrete implementations:
+        public class EmailNotification implements Notification {
+            @Override
+            public void send() {
+                System.out.println("Email sent");
+            }
+        }
+
+        public class SmsNotification implements Notification {
+            @Override
+            public void send() {
+                System.out.println("SMS sent");
+            }
+        }
+
+      Without Factory Method:
+          public class NotificationService {
+              public void notifyUser(String type) {
+                  Notification notification;
+                  if(type.equals("EMAIL")) {
+                      notification = new EmailNotification();
+                  } else {
+                      notification = new SmsNotification();
+                  }
+                  notification.send();
+              }
+          }
+
+      Problems
+          NotificationService is tightly coupled to concrete classes.
+          Every time a new notification type is added, this class must be modified.
+          Violates Open/Closed Principle.
+==========================================================================================================================================================================================
+Now, Factory Method Patterns Solution:
+
+Step 1: Product Interface
+          public interface Notification {
+              void send();
+          }
+
+Step 2: Concrete Products
+          public class EmailNotification implements Notification {
+              @Override
+              public void send() {
+                  System.out.println("Email sent");
+              }
+          }
+
+          public class SmsNotification implements Notification {
+              @Override
+              public void send() {
+                  System.out.println("SMS sent");
+              }
+          }
+
+Step 3: Creator (Abstract Class)
+          This contains the Factory Method.
+              public abstract class NotificationCreator {
+                  // Factory Method
+                  public abstract Notification createNotification();
+                  public void notifyUser() {
+                      Notification notification = createNotification();
+                      notification.send();
+                  }
+              }
+          Notice:
+              Notification notification = createNotification();
+              The creator doesn't know whether it's Email or SMS.
+
+Step 4: Concrete Creators
+          Email Creator:
+                public class EmailNotificationCreator extends NotificationCreator {
+                    @Override
+                    public Notification createNotification() {
+                        return new EmailNotification();
+                    }
+                }
+          SMS Creator:
+                public class SmsNotificationCreator extends NotificationCreator {
+                    @Override
+                    public Notification createNotification() {
+                        return new SmsNotification();
+                    }
+                }
+
+Step 5: Client
+        public class Main {
+              public static void main(String[] args) {
+                NotificationCreator creator;
+
+                creator = new EmailNotificationCreator();
+                creator.notifyUser();
+
+                creator = new SmsNotificationCreator();
+                creator.notifyUser();
+            }
+        }
+Output:
+    Email sent
+    SMS sent
+========================================================================================================================================================================================
+What Actually Happened?
+      When this executes:
+          creator.notifyUser();
+      Suppose:
+          creator = new EmailNotificationCreator();
+      Inside:
+          public void notifyUser() {
+              Notification notification = createNotification();
+              notification.send();
+          }
+      The JVM calls:
+            EmailNotificationCreator.createNotification()
+      which returns:
+            new EmailNotification();
+      So effectively:
+            Notification notification = new EmailNotification();
+      gets created.
+      If the creator is:
+            new SmsNotificationCreator()
+      then:
+            Notification notification = new SmsNotification();
+      gets created.
+      This is Runtime Polymorphism.
+========================================================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
