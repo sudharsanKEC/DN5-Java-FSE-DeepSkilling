@@ -137,8 +137,32 @@ What Actually Happened?
       gets created.
       This is Runtime Polymorphism.
 ========================================================================================================================================================================================
+Structure:
+                   Notification
+                         ^
+                         |
+         --------------------------------
+         |                              |
+EmailNotification            SmsNotification
 
 
+                 NotificationCreator
+                         ^
+                         |
+         --------------------------------
+         |                              |
+EmailNotificationCreator    SmsNotificationCreator
+====================================================================================================================================================================================
+Why Not Just Use new?
+        You might think:
+            Notification notification = new EmailNotification();
+        is simpler.
+        It is.
+        Factory Method becomes useful when:
+                Object creation is complex.
+                Different subclasses create different products.
+                You want to hide creation logic.
+                New product types may be added later.
 
 
 
