@@ -1,0 +1,102 @@
+The Gang of Four (GoF) Design Patterns are 23 classic design patterns categorized into Creational, Structural, and Behavioral patterns.
+
+1) Creational Patterns:
+| Pattern          | Interview Importance | Day-to-Day Usage |
+| ---------------- | -------------------- | ---------------- |
+| Singleton        | ⭐⭐⭐⭐⭐         | ⭐⭐⭐         |
+| Factory Method   | ⭐⭐⭐⭐⭐         | ⭐⭐⭐⭐⭐    |
+| Abstract Factory | ⭐⭐⭐⭐           | ⭐⭐⭐         |
+| Builder          | ⭐⭐⭐⭐⭐         | ⭐⭐⭐⭐⭐    |
+| Prototype        | ⭐⭐⭐              | ⭐⭐           |
+
+2) Structural Patterns
+| Pattern   | Interview Importance | Day-to-Day Usage |
+| --------- | -------------------- | ---------------- |
+| Adapter   | ⭐⭐⭐⭐⭐         | ⭐⭐⭐⭐⭐   |
+| Bridge    | ⭐⭐⭐              | ⭐⭐          |
+| Composite | ⭐⭐⭐⭐           | ⭐⭐⭐        |
+| Decorator | ⭐⭐⭐⭐⭐         | ⭐⭐⭐⭐⭐   |
+| Facade    | ⭐⭐⭐⭐⭐         | ⭐⭐⭐⭐⭐   |
+| Flyweight | ⭐⭐                 | ⭐            |
+| Proxy     | ⭐⭐⭐⭐⭐          | ⭐⭐⭐⭐    |
+
+3) Behavioral Patterns:
+| Pattern                                           | Interview Importance | Day-to-Day Usage |
+| ------------------------------------------------- | -------------------- | ---------------- |
+| Chain of Responsibility                           | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐     |
+| Command                                           | ⭐⭐⭐⭐           | ⭐⭐⭐         |
+| Interpreter                                       | ⭐⭐                | ⭐              |
+| Iterator                                          | ⭐⭐⭐⭐⭐         | ⭐⭐⭐⭐⭐    |
+| Mediator                                          | ⭐⭐⭐              | ⭐⭐           |
+| Memento                                           | ⭐⭐                 | ⭐             |
+| Observer                                          | ⭐⭐⭐⭐⭐          | ⭐⭐⭐⭐⭐   |
+| State                                             | ⭐⭐⭐⭐            | ⭐⭐⭐        |
+| Strategy                                          | ⭐⭐⭐⭐⭐          | ⭐⭐⭐⭐⭐   |
+| Template Method                                   | ⭐⭐⭐⭐⭐          | ⭐⭐⭐⭐     |
+| Visitor                                           | ⭐⭐⭐               | ⭐             |
+| Null Object                                       | ⭐⭐⭐               | ⭐⭐⭐        |
+| Observer (sometimes counted separately only once) | ⭐⭐⭐⭐⭐          | ⭐⭐⭐⭐⭐   |
+
+
+Most Commonly Seen in Spring Boot Internals:
+
+Singleton
+Factory Method
+Builder
+Proxy
+Decorator
+Adapter
+Strategy
+Observer
+Template Method
+Chain of Responsibility
+
+These are the patterns you'll encounter repeatedly when working with:
+
+Spring Core
+Spring Security
+Spring MVC
+Spring Data JPA
+Hibernate
+Jackson
+Lombok
+Java Collections Framework
+
+The Original 23 GoF Patterns
+
+Creational (5)
+
+Singleton
+Factory Method
+Abstract Factory
+Builder
+Prototype
+
+Structural (7)
+  6. Adapter
+  7. Bridge
+  8. Composite
+  9. Decorator
+  10. Facade
+  11. Flyweight
+  12. Proxy
+
+Behavioral (11)
+  13. Chain of Responsibility
+  14. Command
+  15. Interpreter
+  16. Iterator
+  17. Mediator
+  18. Memento
+  19. Observer
+  20. State
+  21. Strategy
+  22. Template Method
+  23. Visitor
+
+
+
+
+
+
+
