@@ -135,5 +135,44 @@ GoF Creational Patterns
           Template Method
           Visitor
 
+To identify the pattern in a code implementation:
+    Whenever you see a pattern,Ask these questions:
+        Is it solving object creation?
+           Creational
+        Examples:
+            Singleton
+            Factory
+            Builder
+
+        Is it solving object organization or wrapping?
+            Structural
+        Examples:
+            Adapter
+            Decorator
+            Facade
+            Proxy
+
+        Is it solving object communication or behavior?
+             Behavioral
+        Examples:
+            Strategy
+            Observer
+            Chain of Responsibility
+
+| Category   | Core Question                          |
+| ---------- | -------------------------------------- |
+| Creational | How do we create objects?              |
+| Structural | How do we organize/connect objects?    |
+| Behavioral | How do objects communicate and behave? |
+
+
+
+
+
+
+
+
+
+
 
 
