@@ -1,0 +1,251 @@
+Why we need adapter pattern and What problem does it solve?
+      Imagine your code expects one interface, but a third-party class provides a different interface.
+      They are both capable of doing the same job, but their method names or structure don't match.
+      The Adapter Pattern acts as a translator between them.
+
+Real-world Analogy
+    Suppose you have:
+        Indian charger plug
+        US wall socket
+    Both are for electricity, but the shapes are different.
+    You use an adapter:
+        Indian Charger -> Adapter -> US Socket
+    The adapter translates one interface into another.
+
+
+Java Example
+      Let's say your application works with this interface:
+            public interface PaymentGateway {
+                void pay(double amount);
+            }
+
+      Your application code:
+          public class CheckoutService {
+              private PaymentGateway paymentGateway;
+              public CheckoutService(PaymentGateway paymentGateway) {
+                  this.paymentGateway = paymentGateway;
+              }
+              public void checkout() {
+                  paymentGateway.pay(1000);
+              }
+          }
+
+      Notice:
+          CheckoutService
+      knows only about:
+          PaymentGateway
+          It doesn't care who actually processes the payment.
+      
+      Third-party Library
+          Suppose Razorpay provides:
+              public class Razorpay {
+                  public void makePayment(double amount) {
+                      System.out.println(
+                          "Payment of " + amount +
+                          " processed by Razorpay"
+                      );
+                  }
+              }
+
+      Problem:
+          Our application expects:
+              pay(amount)
+          But Razorpay provides:
+              makePayment(amount)
+          They are incompatible.
+
+
+Adapter Class
+      public class RazorpayAdapter
+              implements PaymentGateway {
+          private Razorpay razorpay;
+          public RazorpayAdapter(Razorpay razorpay) {
+              this.razorpay = razorpay;
+          }
+          @Override
+          public void pay(double amount) {
+              razorpay.makePayment(amount);
+          }
+      }
+
+The adapter converts:
+      pay(amount) into makePayment(amount)
+
+Usage:
+      public class Main {
+          public static void main(String[] args) {
+              Razorpay razorpay = new Razorpay();
+              PaymentGateway gateway =
+                      new RazorpayAdapter(razorpay);
+              CheckoutService checkoutService =
+                      new CheckoutService(gateway);
+              checkoutService.checkout();
+          }
+      }
+
+Output:
+      Payment of 1000.0 processed by Razorpay
+
+What's happening internally?
+      Without Adapter
+              CheckoutService
+                     |
+                     | expects
+                     v
+              PaymentGateway.pay()
+              
+                     X
+              
+              Razorpay.makePayment()
+              
+      Method names don't match.
+      With Adapter:
+            CheckoutService
+                   |
+                   v
+            PaymentGateway.pay()
+                   |
+                   v
+            RazorpayAdapter
+                   |
+                   v
+            Razorpay.makePayment()
+      Now everything works.
+
+Structure of Adapter Pattern
+      There are usually 4 participants:
+              Client
+                |
+                v
+              Target Interface
+                ^
+                |
+              Adapter
+                |
+                v
+              Adaptee (existing class)
+      In our payment example:
+            Client           -> CheckoutService
+            Target           -> PaymentGateway
+            Adapter          -> RazorpayAdapter
+            Adaptee          -> Razorpay
+
+When should you use Adapter?
+      Use Adapter when:
+            You want to integrate a third-party library.
+            Existing classes have incompatible interfaces.
+            You cannot modify the existing class.
+            You want your code to depend on your own interface rather than external APIs.
+      This is very common in Spring Boot applications when integrating payment gateways, SMS providers, email services, cloud storage providers, or external APIs.
+
+Why not modify Razorpay?
+    You might think:
+          Why not just change Razorpay and add a pay() method?
+    Because:
+          It's third-party code.
+          You may not have access to the source code.
+          Updating the library may overwrite your changes.
+    Instead, we create our own adapter.
+
+Q: Instead of thinking about modifying the razor pay code, why cant we make a change on our own code, from pay() to makePayment()?
+Answer:
+      At first glance, it seems easier to modify our code instead of creating an adapter.
+      For example:
+          Instead of:
+              public interface PaymentGateway {
+                  void pay(double amount);
+              }
+      we could simply change it to:
+            public interface PaymentGateway {
+                void makePayment(double amount);
+            }
+      or even directly use:
+            Razorpay razorpay = new Razorpay();
+            razorpay.makePayment(1000);
+      So why bother with an Adapter?
+
+Case 1: Only Razorpay exists
+      If your entire application will always use Razorpay and nothing else, then you're right.
+      You don't need an adapter.
+      You can directly use:
+          Razorpay razorpay = new Razorpay();
+          razorpay.makePayment(1000);
+      Using an adapter here would be unnecessary complexity.
+
+Case 2: Your application defines its own business language
+    Suppose your application supports multiple payment providers.
+    You define:
+        public interface PaymentGateway {
+            void pay(double amount);
+        }
+    Notice that: pay() is your business language.
+    Now imagine:
+        Razorpay
+            makePayment()
+        Stripe
+            charge()
+        PayPal
+            sendMoney()
+
+    All do the same thing, but have different method names.
+        Without adapters:
+              if(provider.equals("RAZORPAY")) {
+                  razorpay.makePayment(amount);
+              }
+              else if(provider.equals("STRIPE")) {
+                  stripe.charge(amount);
+              }
+              else if(provider.equals("PAYPAL")) {
+                  paypal.sendMoney(amount);
+              }
+    Your application becomes tightly coupled to every provider.
+
+With adapters:
+        PaymentGateway gateway = ...;
+        gateway.pay(amount);
+    Your business code never changes.
+    Each adapter translates:
+        pay()
+           |
+           +--> makePayment()
+           +--> charge()
+           +--> sendMoney()
+
+    The real goal
+        The Adapter Pattern is usually not about saving a few lines of code.
+        It's about protecting your application from external changes.
+        Your application owns:
+              PaymentGateway
+        External companies own:
+              Razorpay
+              Stripe
+              PayPal
+        You don't want your entire codebase speaking Razorpay's language.
+        You want external systems to speak your application's language.
+
+A rule used in professional software
+      Core business code should be stable.
+      External libraries should be isolated.
+      Adapter helps achieve exactly that.
+            Business Code
+                 |
+                 |  (stable)
+                 v
+            PaymentService.pay()
+                 |
+                 v
+            Adapter
+                 |
+                 v
+            RazorPay.makePayment()
+      If RazorPay changes tomorrow, only the adapter changes.
+      The rest of your application remains untouched.
+
+
+
+
+
+
+
+
+
