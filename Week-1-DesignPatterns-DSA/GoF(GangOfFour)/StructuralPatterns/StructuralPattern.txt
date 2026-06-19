@@ -1,0 +1,28 @@
+What are Structural Patterns?
+        Structural patterns focus on:
+              How classes and objects are combined to form larger structures.
+        Creational patterns answer:
+              "How do I create objects?"
+        Structural patterns answer:
+              "How do I organize and connect objects?"
+        Think of building a house:
+              Creational → Making bricks.
+              Structural → Arranging bricks into walls, rooms, and floors.
+
+Structural Patterns List (GoF)
+    There are 7 Structural Patterns:
+        | Pattern   | Purpose                                      |
+        | --------- | -------------------------------------------- |
+        | Adapter   | Make incompatible classes work together      |
+        | Bridge    | Separate abstraction from implementation     |
+        | Composite | Treat individual and group objects uniformly |
+        | Decorator | Add behavior dynamically                     |
+        | Facade    | Provide a simplified interface               |
+        | Flyweight | Reduce memory usage by sharing objects       |
+        | Proxy     | Control access to an object                  |
+
+The patterns that we are going to study is:
+            i)   Adapter Pattern
+            ii)  Decorator Pattern
+            iii) Proxy Pattern
+            
