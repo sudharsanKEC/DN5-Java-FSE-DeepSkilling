@@ -1,0 +1,147 @@
+What is a builder pattern?
+      Builder Pattern is another Creational Design Pattern, but it solves a completely different problem from Factory Method and Abstract Factory.
+      The Builder pattern is a creational design pattern used in object-oriented programming to construct complex objects step-by-step. 
+      It separates the construction logic from the final representation of the object, allowing you to create different configurations or types of objects using the exact same building process.
+
+What problem does Builder solve?
+      Imagine a User class.
+      public class User {
+          private String username;
+          private String email;
+          private String bio;
+          private String profilePicture;
+          private String website;
+          private String location;
+          // constructor
+      }
+Suppose only:
+        username
+        email
+    are mandatory.
+    Everything else is optional.
+
+Without Builder
+    You might write:
+          public User(
+              String username,
+              String email,
+              String bio,
+              String profilePicture,
+              String website,
+              String location
+          ) {
+              ...
+          }
+    Usage:
+          User user = new User(
+              "sudharsan",
+              "sudharsan@gmail.com",
+              null,
+              null,
+              null,
+              "India"
+          );
+    Questions:
+          What is the 3rd null?
+          What is the 4th null?
+          What is the 5th null?
+      Nobody knows by looking at the code.
+      This becomes worse when there are 10+ fields.
+      This is sometimes called the Telescoping Constructor Problem.
+
+Builder Pattern Solution
+      Instead of:
+            User user = new User(
+                  "sudharsan",
+                  "sudharsan@gmail.com",
+                  null,
+                  null,
+                  null,
+                  "India"
+            );
+      You do:
+            User user = new User.Builder()
+                    .username("sudharsan")
+                    .email("sudharsan@gmail.com")
+                    .location("India")
+                    .build();
+      Much easier to read.
+
+Structure
+      Product
+          public class User {
+
+              private String username;
+              private String email;
+              private String bio;
+              private String location;
+              private User(Builder builder) {
+                  this.username = builder.username;
+                  this.email = builder.email;
+                  this.bio = builder.bio;
+                  this.location = builder.location;
+              }
+
+              // The below is the builder class, it was created as a static nested class, so that it can be directly accessed with User class name instead of creating an object seperately for the User class.
+              // It is nested, because the Builder class itself is dependent and used only on the User class. So this builder class should be tightly coupled with the User class.
+              public static class Builder{
+                    private String username;
+                    private String email;
+                    private String bio;
+                    private String location;
+
+                    public Builder username(String username){
+                        this.username = username;
+                        return this;
+                    }
+                    
+                    public Builder email(String email){
+                        this.email = email;
+                        return this;
+                    }
+
+                    public Builder bio(String bio){
+                        this.bio = bio;
+                        return this;
+                    }  
+
+                    public Builder location(String location){
+                        this.location = location;
+                        return this;
+                    }
+
+                    public User build(){
+                        return new User(this); // in this line the builder object used to build the user details were passed to the User constructor and from there the 
+                    }
+              }
+              
+          }
+
+Usage
+      User user = new User.Builder()
+              .username("sudharsan")
+              .email("sudharsan@gmail.com")
+              .bio("Java Developer")
+              .location("India")
+              .build();
+      Step by step:
+            new User.Builder()
+        creates a builder object.
+            .username("sudharsan")
+        stores username inside the builder.
+      Returns:
+            return this;
+      so method chaining continues.
+            .email("sudharsan@gmail.com")
+      stores email.
+      Returns builder again.
+
+      Finally:
+          .build()
+      creates the actual User.
+
+
+
+
+
+
