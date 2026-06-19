@@ -1,0 +1,102 @@
+What is Telescoping Constructor?
+      The Telescoping Constructor Problem occurs when a class has many optional parameters, and you create multiple constructors to handle different combinations of those parameters.
+      As the number of parameters increases, the number of constructors grows, making the code difficult to read and maintain.
+      Example
+        Suppose you have a Student class:
+                  class Student {
+                      String name;
+                      int age;
+                      String department;
+                      double cgpa;
+                  
+                      Student(String name) {
+                          this.name = name;
+                      }
+                  
+                      Student(String name, int age) {
+                          this(name);
+                          this.age = age;
+                      }
+                  
+                      Student(String name, int age, String department) {
+                          this(name, age);
+                          this.department = department;
+                      }
+                  
+                      Student(String name, int age, String department, double cgpa) {
+                          this(name, age, department);
+                          this.cgpa = cgpa;
+                      }
+                  }
+
+      Usage:
+            Student s1 = new Student("John");
+            Student s2 = new Student("John", 20);
+            Student s3 = new Student("John", 20, "CSE");
+            Student s4 = new Student("John", 20, "CSE", 8.5);
+      Notice how each constructor calls another constructor:
+                  Constructor 4
+                    ↓
+                  Constructor 3
+                    ↓
+                  Constructor 2
+                    ↓
+                  Constructor 1
+
+      This chain resembles the sections of a telescope extending one after another, hence the name telescoping constructors.
+      Problems
+          Too many constructors
+                Student(name)
+                Student(name, age)
+                Student(name, age, department)
+                Student(name, age, department, cgpa)
+                ...
+          Hard to maintain
+          Adding a new field may require creating more constructors.
+
+      Parameter confusion
+          new Student("John", 20, "CSE", 8.5);
+      It's not immediately obvious what each value represents.
+      Poor scalability
+      With many optional fields, constructors can explode in number.
+      Solution: Builder Pattern
+      
+      Instead of:
+          Student s = new Student("John", 20, "CSE", 8.5);
+      Use:
+          Student s = new StudentBuilder()
+                          .setName("John")
+                          .setAge(20)
+                          .setDepartment("CSE")
+                          .setCgpa(8.5)
+                          .build();
+      This is one of the main reasons the Builder Design Pattern was introduced.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
