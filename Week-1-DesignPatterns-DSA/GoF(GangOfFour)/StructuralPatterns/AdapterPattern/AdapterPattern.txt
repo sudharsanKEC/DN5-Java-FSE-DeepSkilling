@@ -241,8 +241,28 @@ A rule used in professional software
       If RazorPay changes tomorrow, only the adapter changes.
       The rest of your application remains untouched.
 
-
-
+Object creation map:
+            checkoutService
+                  |
+                  v
+            +-------------------+
+            | CheckoutService   |
+            |                   |
+            | gateway ----------|----------+
+            +-------------------+          |
+                                           |
+                                           v
+                                  +-------------------+
+                                  | RazorpayAdapter   |
+                                  |                   |
+                                  | razorpay ---------|-----+
+                                  +-------------------+     |
+                                                             |
+                                                             v
+                                                      +------------+
+                                                      | Razorpay   |
+                                                      +------------+
+            
 
 
 
