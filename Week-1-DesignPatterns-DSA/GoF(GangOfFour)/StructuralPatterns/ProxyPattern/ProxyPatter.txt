@@ -94,23 +94,119 @@ Example: Image Viewer
                     }
                 }
 
+Output
+        Proxy created
+            Loading image from disk: profile.jpg
+            Displaying image: profile.jpg
+        Displaying image: profile.jpg
+        Notice:
+            First call:
+                        image.display();
+                    creates:
+                        new RealImage(...)
+                    and loads the image.
+            Second call:
+                    image.display();
+                doesn't load again.
+            It reuses the already created object.
 
+Why not directly use RealImage?
+        Without Proxy:
+            Image image = new RealImage("profile.jpg");
+        Output:
+            Loading image from disk: profile.jpg
+        happens immediately, even if you never call:
+                image.display();
+            That's wasteful.
+        The proxy delays object creation until it is actually needed.
+        This is called Lazy Initialization.
 
+Another Example: Security Proxy
+        Suppose only ADMIN users can delete files.
+        Interface
+            public interface FileService {
+                void deleteFile(String fileName);
+            }
 
+        Real Service
+            public class RealFileService implements FileService {
+                @Override
+                public void deleteFile(String fileName) {
+                    System.out.println(fileName + " deleted");
+                }
+            }
 
+        Proxy
+            public class FileServiceProxy implements FileService {
+                    private String role;
+                    private RealFileService realService;
+                
+                    public FileServiceProxy(String role) {
+                        this.role = role;
+                        this.realService = new RealFileService();
+                    }
+                
+                    @Override
+                    public void deleteFile(String fileName) {
+                
+                        if ("ADMIN".equals(role)) {
+                            realService.deleteFile(fileName);
+                        } else {
+                            System.out.println("Access Denied");
+                        }
+                    }
+                }
 
+        Client
+                public class Main {
+                    public static void main(String[] args) {
+                        FileService service = new FileServiceProxy("USER");
+                        service.deleteFile("data.txt");
+                    }
+                }
 
+        Output:
+                Access Denied
+                The proxy controls access before reaching the real object.
+        
+        Types of Proxy
+            1. Virtual Proxy
+                    Creates expensive objects only when needed.
+                Example:
+                    ProxyImage
+            2. Protection Proxy
+                    Controls access.
+                Example:
+                    FileServiceProxy
+                    Checks permissions.
+            3. Remote Proxy
+                    Represents an object located on another machine.
+                        Client
+                          ↓
+                        Remote Proxy
+                          ↓
+                        Remote Server
+                    Common in distributed systems and RPC frameworks.
+            4. Caching Proxy
+                    Stores results to avoid repeated expensive operations.
+                Example:
+                    getUser(1)
+                First call:
+                    Database queried
+                Second call:
+                    Returned from cache
 
+So the proxy patterns can be used to,
+        delay creation
+        check permissions
+        cache data
+        log actions
+    before forwarding the call.
 
+One liner explanation:
+        The Proxy Pattern provides a placeholder or surrogate object that controls access to a real object. The proxy implements the same interface as the real object and can perform additional actions such as lazy loading, security checks, caching, logging, or remote communication before delegating the request to the real object.
 
-
-
-
-
-
-
-
-
-
+Summarized understanding:
+        So the Real Image class stands behind the ProxyImage, and both were implementing the interface Image. And the client accesses the RealImage through that ProxyImage class, and from the proxy image class we can control when the image should load, whether we should show the image or not and these kind of controls over it was got from that proxy class (am I right?). And without the ProxyImage we should directly communicate with the RealImage through the Main class(client side) and which was not really a good design and reduce our control over the retrieval of Image when the client asks it (Am I right?).
 
 
