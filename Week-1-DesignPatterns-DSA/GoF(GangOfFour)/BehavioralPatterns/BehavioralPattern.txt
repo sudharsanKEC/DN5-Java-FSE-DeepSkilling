@@ -1,0 +1,49 @@
+The third category of the GoF is Behavioral Patterns:
+      Behavioral patterns focus on:
+            How objects communicate with each other and how responsibilities are distributed between them.
+      Instead of asking:
+            "How should I create objects?" (Creational)
+            "How should I connect objects?" (Structural)
+      Behavioral patterns ask:
+            "How should objects interact?"
+            "How should requests flow?"
+            "Who should handle a particular action?"
+            "How can communication be made flexible?"
+   
+      Real-Life Analogy
+              Imagine a company:
+                      Creational Patterns
+                              Hiring employees.
+                      Structural Patterns
+                              Organizing employees into departments.
+                      Behavioral Patterns
+                              Defining how employees communicate and perform work.
+                                    Who approves leave?
+                                    Who handles customer complaints?
+                                    How are notifications sent?
+                                    How do departments collaborate?
+                              These are behavioral concerns.
+
+Types of Behavioral Patterns (GoF)
+      There are 11 Behavioral Patterns:
+            | Pattern                 | Purpose                                         |
+            | ----------------------- | ----------------------------------------------- |
+            | Chain of Responsibility | Pass request through multiple handlers          |
+            | Command                 | Encapsulate requests as objects                 |
+            | Interpreter             | Define grammar and interpret language           |
+            | Iterator                | Traverse collections without exposing structure |
+            | Mediator                | Centralize communication between objects        |
+            | Memento                 | Save and restore object state                   |
+            | Observer                | Notify multiple objects about changes           |
+            | State                   | Change behavior based on internal state         |
+            | Strategy                | Switch algorithms dynamically                   |
+            | Template Method         | Define algorithm skeleton                       |
+            | Visitor                 | Add operations without modifying classes        |
+            
+
+Tier 1 (Very Important)
+      Strategy
+      Observer
+      Command
+
+
