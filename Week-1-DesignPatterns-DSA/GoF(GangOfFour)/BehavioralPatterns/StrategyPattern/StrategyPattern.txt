@@ -1,0 +1,333 @@
+What is Strategy Pattern?
+        Strategy Pattern is a behavioral design pattern that allows you to:
+        Define multiple algorithms/behaviors, encapsulate them into separate classes, and choose one at runtime.
+        In simple terms:
+              Instead of writing:
+                    if(condition){
+                        doSomething();
+                    }
+                    else if(condition){
+                        doSomethingElse();
+                    }
+                    else{
+                        anotherThing();
+                    }
+        You create separate classes for each behavior and switch between them dynamically.
+
+Why Does Strategy Pattern Exist?
+        Let's build up the problem naturally.
+        Imagine you're building an e-commerce application.
+        Customers can pay using:
+                  Credit Card
+                  UPI
+                  PayPal
+
+First Attempt (Without Strategy)
+        public class PaymentService {
+            public void pay(String paymentType, double amount) {
+                if(paymentType.equals("UPI")) {
+                    System.out.println("Paying through UPI");
+                }
+                else if(paymentType.equals("CARD")) {
+                    System.out.println("Paying through Credit Card");
+                }
+                else if(paymentType.equals("PAYPAL")) {
+                    System.out.println("Paying through PayPal");
+                }
+            }
+        }
+
+Usage:
+        PaymentService service = new PaymentService();
+        service.pay("UPI", 1000);
+      Works fine.
+
+
+What's Wrong With This?
+        At first glance, nothing.
+        But imagine after 6 months.
+        Now business asks:
+                Add:
+                    Net Banking
+                    Apple Pay
+                    Google Pay
+                    Crypto
+        Now your code becomes:
+                if(paymentType.equals("UPI")) {
+                }
+                else if(paymentType.equals("CARD")) {
+                }
+                else if(paymentType.equals("PAYPAL")) {
+                }
+                else if(paymentType.equals("NETBANKING")) {
+                }
+                else if(paymentType.equals("APPLEPAY")) {
+                }
+                else if(paymentType.equals("GOOGLEPAY")) {
+                }
+        The class keeps growing.
+
+Problem 1: Violates Open-Closed Principle
+        Every new payment method requires:
+                PaymentService
+        to be modified.
+        Not good.
+
+Problem 2: Huge if-else chains
+        After years:
+              if(...)
+              else if(...)
+              else if(...)
+              else if(...)
+              else if(...)
+              else if(...)
+              else if(...)
+        Messy.
+
+Problem 3: Business Logic Mixed Together
+        One class contains:
+              UPI logic
+              Card logic
+              PayPal logic
+              Net Banking logic
+        Everything is packed into a single class.
+
+Strategy Pattern Solution
+        Separate each payment algorithm into its own class.
+        Instead of:
+              PaymentService deciding HOW to pay
+        we make:
+              UPIPayment
+              CardPayment
+              PaypalPayment
+        Each knows how to pay.
+
+Step 1: Create Strategy Interface
+            public interface PaymentStrategy {
+                void pay(double amount);
+            }
+        This is the common contract.
+
+Step 2: Create Concrete Strategies
+          UPI Strategy
+                public class UpiPayment implements PaymentStrategy {
+                    @Override
+                    public void pay(double amount) {
+                        System.out.println("Paid " + amount + " using UPI");
+                    }
+                }
+          Credit Card Strategy
+                public class CardPayment implements PaymentStrategy {
+                    @Override
+                    public void pay(double amount) {
+                        System.out.println("Paid " + amount + " using Card");
+                    }
+                }
+
+          PayPal Strategy
+                public class PaypalPayment implements PaymentStrategy {
+                    @Override
+                    public void pay(double amount) {
+                        System.out.println("Paid " + amount + " using PayPal");
+                    }
+                }
+
+Step 3: Context Class
+          This is the class that uses the strategy.
+                public class PaymentService {
+                    private PaymentStrategy paymentStrategy;
+                    public PaymentService(PaymentStrategy paymentStrategy) {
+                        this.paymentStrategy = paymentStrategy;
+                    }
+                    public void makePayment(double amount) {
+                        paymentStrategy.pay(amount);
+                    }
+                }
+          Notice:
+                PaymentService
+          doesn't know:
+                UPI
+                Card
+                PayPal
+          It only knows:
+                PaymentStrategy
+          This is very important.
+
+Step 4: Usage
+          UPI:
+              PaymentStrategy strategy = new UpiPayment();
+              PaymentService service = new PaymentService(strategy);
+              service.makePayment(1000);
+          
+          Output:
+              Paid 1000 using UPI
+          Card:
+              PaymentStrategy strategy = new CardPayment();
+              PaymentService service = new PaymentService(strategy);
+              service.makePayment(2000);
+          Output:
+              Paid 2000 using Card
+          Same service.
+          Different behavior.
+
+What Actually Changed?
+          Earlier:
+              PaymentService
+          was deciding:
+              Which algorithm should run
+          Now:
+              PaymentService
+          delegates that responsibility.
+              PaymentService
+                      ↓
+              PaymentStrategy
+                      ↓
+              Concrete Strategy
+
+Runtime Switching
+          Strategy Pattern shines when behavior changes dynamically.
+          Example:
+                  PaymentStrategy strategy;
+                  if(userChoice.equals("UPI")) {
+                      strategy = new UpiPayment();
+                  }
+                  else {
+                      strategy = new CardPayment();
+                  }
+                  PaymentService service =
+                          new PaymentService(strategy);
+                  service.makePayment(500);
+          The algorithm is selected at runtime.
+
+Real-Life Analogy
+          Imagine Google Maps.
+          You choose:
+                Car
+                Bike
+                Walk
+                Public Transport
+          The destination remains same.
+          Only route calculation changes.
+          Instead of:
+                if(vehicle == CAR)
+                if(vehicle == BIKE)
+          Google Maps can have:
+                RouteStrategy
+          Implementations:
+                CarRouteStrategy
+                BikeRouteStrategy
+                WalkRouteStrategy
+          Maps simply calls:
+                routeStrategy.calculateRoute();
+          This is Strategy Pattern.
+
+Class Diagram
+                 PaymentStrategy
+                        ↑
+            ------------------------
+            ↑          ↑          ↑
+            UPI       Card      PayPal
+
+                        ↑
+                        |
+                PaymentService
+
+Why Is It Called "Strategy"?
+          Because each class represents a different strategy (algorithm) for achieving the same goal.
+          Goal:
+                Make Payment
+          Strategies:
+                UPI Strategy
+                Card Strategy
+                PayPal Strategy
+          Different approaches.
+          Same result.
+
+One Important Observation
+          Look at this constructor:
+                public PaymentService(
+                            PaymentStrategy paymentStrategy)
+          Does this look familiar?
+          It should.
+          This is also:
+                Dependency Inversion Principle
+                Dependency Injection
+          The Strategy Pattern heavily relies on polymorphism and DI.
+
+When Should You Think About Strategy Pattern?
+        Whenever you see:
+              if(type.equals(...))
+              else if(type.equals(...))
+              else if(type.equals(...))
+        where each branch represents a different way of doing the same thing.
+        Examples:
+              Payment:
+                      UPI
+                      Card
+                      PayPal
+              Notification
+                      Email
+                      SMS
+                      Push Notification
+              Discount Calculation
+                      Festival Discount
+                      Premium Discount
+                      Student Discount
+              Sorting
+                      Quick Sort
+                      Merge Sort
+                      Bubble Sort
+          If the algorithm changes but the goal remains the same, Strategy Pattern is usually a good fit.
+
+The core idea in one sentence
+                Strategy Pattern extracts interchangeable behaviors into separate classes and lets the client choose which behavior (strategy) to use at runtime, 
+            avoiding large if-else chains and making the code open for extension.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
