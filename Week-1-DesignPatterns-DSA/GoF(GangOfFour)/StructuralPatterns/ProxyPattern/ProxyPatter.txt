@@ -1,0 +1,116 @@
+What is Proxy Pattern?
+    The Proxy Pattern is a Structural Design Pattern.
+      The main idea is:
+            A Proxy object acts as a substitute (middleman) for a real object and controls access to it.
+          Think of it like a security guard standing in front of a building.
+              You don't directly enter the building.
+              You first talk to the guard.
+              The guard may:
+                    Allow access
+                    Deny access
+                    Log your visit
+                    Delay creation of the real object until needed
+
+Real-world Example
+    Imagine watching a YouTube video.
+    You don't directly communicate with the video storage servers.
+    Instead:
+          User
+            ↓
+          YouTube Proxy/CDN
+            ↓
+          Video Server
+    The proxy can:
+          Cache videos
+          Check permissions
+          Reduce network calls
+
+    Structure
+                Client
+                   |
+                   v
+              Subject Interface
+                   ^
+                   |
+           -------------------
+           |                 |
+           |                 |
+         RealSubject      Proxy
+    Both the Real Object and Proxy implement the same interface.
+
+Example: Image Viewer
+        Suppose loading an image from disk is expensive.
+          
+          Step 1: Subject Interface
+                    public interface Image {
+                        void display();
+                    }
+
+          Step 2: Real Object
+            This object does the heavy work.
+                    public class RealImage implements Image {
+                        private String fileName;
+                        public RealImage(String fileName) {
+                            this.fileName = fileName;
+                            loadFromDisk();
+                        }
+                        private void loadFromDisk() {
+                            System.out.println("Loading image from disk: " + fileName);
+                        }
+                        @Override
+                        public void display() {
+                            System.out.println("Displaying image: " + fileName);
+                        }
+                    }
+
+          Step 3: Proxy
+                  public class ProxyImage implements Image {
+                        private String fileName;
+                        private RealImage realImage;
+                        public ProxyImage(String fileName) {
+                            this.fileName = fileName;
+                        }
+                        @Override
+                        public void display() {
+                            if (realImage == null) {
+                                realImage = new RealImage(fileName);
+                            }
+                            realImage.display();
+                        }
+                }
+                Notice:
+                      private RealImage realImage;
+                Initially:
+                      realImage = null;
+                The actual image is created only when needed.
+
+          Step 4: Client
+                public class Main {
+                    public static void main(String[] args) {
+                        Image image = new ProxyImage("profile.jpg");
+                        System.out.println("Proxy created");
+                        image.display();
+                        image.display();
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
