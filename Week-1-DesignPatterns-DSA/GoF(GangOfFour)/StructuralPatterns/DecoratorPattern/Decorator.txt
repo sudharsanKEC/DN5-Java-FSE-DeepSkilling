@@ -1,0 +1,259 @@
+What is decorator pattern?
+    The Decorator Pattern is a structural design pattern that allows you to add new behavior to an object dynamically without modifying its existing code.
+    Think of it as wrapping an object inside another object that adds extra functionality.
+  
+Real-Life Analogy: Coffee Shop
+    Suppose a coffee shop sells:
+          Plain Coffee → ₹50
+    Customers can add:
+          Milk → +₹10
+          Sugar → +₹5
+          Whipped Cream → +₹20
+    Instead of creating classes like:
+          MilkCoffee
+          SugarCoffee
+          MilkSugarCoffee
+          MilkSugarWhippedCreamCoffee
+          SugarWhippedCreamCoffee
+      which quickly becomes a mess,
+      we use Decorator Pattern.
+
+Step 1: Component Interface
+    This is the common type.
+        public interface Coffee {
+            String getDescription();
+            int getCost();
+        }
+
+Step 2: Concrete Component
+      The basic object.
+          public class PlainCoffee implements Coffee {
+          
+              @Override
+              public String getDescription() {
+                  return "Plain Coffee";
+              }
+          
+              @Override
+              public int getCost() {
+                  return 50;
+              }
+          }
+
+Step 3: Abstract Decorator
+          Notice something important:
+          A decorator also implements Coffee.
+          And it contains a Coffee object.
+              public abstract class CoffeeDecorator implements Coffee {
+              
+                  protected Coffee coffee;
+              
+                  public CoffeeDecorator(Coffee coffee) {
+                      this.coffee = coffee;
+                  }
+              }
+          This is the heart of the pattern.
+
+Step 4: Concrete Decorators
+          Milk Decorator
+              public class MilkDecorator extends CoffeeDecorator {
+                  public MilkDecorator(Coffee coffee) {
+                      super(coffee);
+                  }
+                  @Override
+                  public String getDescription() {
+                      return coffee.getDescription() + ", Milk";
+                  }
+                  @Override
+                  public int getCost() {
+                      return coffee.getCost() + 10;
+                  }
+              }
+
+          Sugar Decorator
+              public class SugarDecorator extends CoffeeDecorator {
+              
+                  public SugarDecorator(Coffee coffee) {
+                      super(coffee);
+                  }
+              
+                  @Override
+                  public String getDescription() {
+                      return coffee.getDescription() + ", Sugar";
+                  }
+              
+                  @Override
+                  public int getCost() {
+                      return coffee.getCost() + 5;
+                  }
+              }
+
+            Whipped Cream Decorator
+              public class WhippedCreamDecorator extends CoffeeDecorator {
+              
+                  public WhippedCreamDecorator(Coffee coffee) {
+                      super(coffee);
+                  }
+              
+                  @Override
+                  public String getDescription() {
+                      return coffee.getDescription() + ", Whipped Cream";
+                  }
+              
+                  @Override
+                  public int getCost() {
+                      return coffee.getCost() + 20;
+                  }
+              }
+
+Step 5: Client Code
+              public class Main {
+              
+                  public static void main(String[] args) {
+              
+                      Coffee coffee = new PlainCoffee();
+              
+                      coffee = new MilkDecorator(coffee);
+                      coffee = new SugarDecorator(coffee);
+                      coffee = new WhippedCreamDecorator(coffee);
+              
+                      System.out.println(coffee.getDescription());
+                      System.out.println(coffee.getCost());
+                  }
+              }
+          Output:
+              Plain Coffee, Milk, Sugar, Whipped Cream
+              85
+
+What Actually Happens?
+        Let's trace it carefully.
+        First
+            Coffee coffee = new PlainCoffee();
+        Object:
+            PlainCoffee
+        Then
+            coffee = new MilkDecorator(coffee);
+        Object structure:
+            MilkDecorator
+                  |
+                  v
+            PlainCoffee
+
+        Then
+            coffee = new SugarDecorator(coffee);
+        Structure:
+            SugarDecorator
+                  |
+                  v
+            MilkDecorator
+                  |
+                  v
+            PlainCoffee
+
+        Then
+            coffee = new WhippedCreamDecorator(coffee);
+        Structure:
+            WhippedCreamDecorator
+                     |
+                     v
+              SugarDecorator
+                     |
+                     v
+              MilkDecorator
+                     |
+                     v
+                PlainCoffee
+
+How Does Method Call Flow?
+    When:
+        coffee.getCost();
+      is executed,
+      the actual object is:
+        WhippedCreamDecorator
+      So:
+        WhippedCreamDecorator.getCost()
+      runs:
+        return coffee.getCost() + 20;
+      Its coffee is:
+        SugarDecorator
+      So it calls:
+        SugarDecorator.getCost()
+    which does:
+        return coffee.getCost() + 5;
+    Its coffee is:
+        MilkDecorator
+    which calls:
+        return coffee.getCost() + 10;
+    Its coffee is:
+        PlainCoffee
+    which returns:
+        50
+    Now values return back:
+        PlainCoffee = 50
+        MilkDecorator = 50 + 10 = 60
+        SugarDecorator = 60 + 5 = 65
+        WhippedCreamDecorator = 65 + 20 = 85
+    Final result:
+        85
+      
+Why Does It Work?
+      Because every decorator:
+          implements Coffee
+      and contains:
+          Coffee coffee;
+      So a decorator is-a Coffee and has-a Coffee.
+      This allows unlimited wrapping.
+          Coffee coffee = 
+              new SugarDecorator(
+                new MilkDecorator(
+                  new PlainCoffee()
+                )
+          );
+        This is completely valid.
+
+Structure
+           Coffee
+              ^
+              |
+    -------------------
+    |                 |
+PlainCoffee   CoffeeDecorator
+                     ^
+                     |
+          -------------------------
+          |          |           |
+     MilkDecorator SugarDecorator WhippedCreamDecorator
+
+When to Use Decorator Pattern
+      Use it when:
+           You want to add functionality without modifying existing classes.
+           You want combinations of features at runtime.
+           Inheritance would create too many subclasses.
+      Examples:
+          Coffee add-ons
+          Pizza toppings
+          Logging wrappers
+          Input/Output streams in Java
+          Compression wrappers
+          Encryption wrappers
+
+          A famous real-world Java example is the java.io package:
+              InputStream input =
+                  new BufferedInputStream(
+                      new FileInputStream("file.txt")
+                  );
+          Here:
+              FileInputStream = concrete component
+              BufferedInputStream = decorator
+          The stream is wrapped to add buffering behavior without changing FileInputStream.
+          That's one of the most commonly cited examples of the Decorator Pattern in Java.
+
+
+
+
+
+
+
+
+
+
