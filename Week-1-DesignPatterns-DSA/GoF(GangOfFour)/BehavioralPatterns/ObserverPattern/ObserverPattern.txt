@@ -1,0 +1,253 @@
+What Problem Does Observer Pattern Solve?
+      Imagine a social media platform.
+      When a user posts something:
+              Followers should get notified.
+              Notification service should get notified.
+              Analytics service should get notified.
+              Recommendation engine should get notified.
+
+Naive Approach
+        public class User {
+            public void createPost(String content) {
+                // save post
+                notificationService.notifyFollowers();
+                analyticsService.trackPost();
+                recommendationService.updateFeed();
+            }
+        }
+Problems
+        The User class now depends on:
+                NotificationService
+                AnalyticsService
+                RecommendationService
+        What if tomorrow we add:
+                EmailService
+                SearchIndexer
+                ActivityLogger
+        Then we must keep modifying User.
+        This violates the Open/Closed Principle.
+
+Core Idea
+      Instead of the User knowing everyone who needs updates:
+            "I will simply announce that something happened."
+      Interested objects will subscribe themselves.
+      When something changes:
+            Subject broadcasts event
+            Observers receive event
+      This is exactly how YouTube subscriptions work.
+
+Real-Life Example
+      Subject
+            YouTube Channel
+      Observers
+            Subscribers
+        When a channel uploads a video:
+              Channel uploads video
+                    |
+                    v
+              Subscriber 1 notified
+              Subscriber 2 notified
+              Subscriber 3 notified
+              Subscriber 4 notified
+        The channel doesn't know what each subscriber does.
+
+It only knows:
+        subscriber.update();
+
+Structure
+            Observer
+          +-----------+
+          | update()  |
+          +-----------+
+                ^
+                |
+     ----------------------
+     |                    |
+ EmailObserver    MobileObserver
+
+                ^
+                |
+            Subject
+       +-------------------+
+       | addObserver()     |
+       | removeObserver()  |
+       | notifyObservers() |
+       +-------------------+
+
+Components
+      1. Observer
+              Common interface.
+                  public interface Observer {
+                      void update(String message);
+                  }
+
+      2. Concrete Observers
+              Mobile User
+                  public class MobileUser implements Observer {
+                      private String name;
+                      public MobileUser(String name) {
+                          this.name = name;
+                      }
+                      @Override
+                      public void update(String message) {
+                          System.out.println(
+                              name + " received mobile notification: "
+                              + message
+                          );
+                      }
+                  }
+
+              Email User
+                  public class EmailUser implements Observer {
+                      private String email;
+                      public EmailUser(String email) {
+                          this.email = email;
+                      }
+                      @Override
+                      public void update(String message) {
+                          System.out.println(
+                              email + " received email: "
+                              + message
+                          );
+                      }
+                  }
+
+          3. Subject Interface
+                  The thing being observed.
+                      public interface Subject {
+                          void addObserver(Observer observer);
+                          void removeObserver(Observer observer);
+                          void notifyObservers();
+                      }
+
+          4. Concrete Subject
+                  YouTube Channel.
+                      import java.util.ArrayList;
+                      import java.util.List;
+                      public class YouTubeChannel implements Subject {
+                          private List<Observer> observers =
+                                  new ArrayList<>();
+                          private String latestVideo;
+                          @Override
+                          public void addObserver(Observer observer) {
+                              observers.add(observer);
+                          }
+                          @Override
+                          public void removeObserver(Observer observer) {
+                              observers.remove(observer);
+                          }
+
+                          public void uploadVideo(String videoTitle) {
+                              this.latestVideo = videoTitle;
+                              System.out.println(
+                                      "Channel uploaded: " + videoTitle);
+                              notifyObservers();
+                          }
+
+                          @Override
+                          public void notifyObservers() {
+                              for(Observer observer : observers) {
+                                  observer.update(
+                                      "New video uploaded: " + latestVideo
+                                  );
+                                }
+                            }
+                        }
+        
+                  Client Code
+                          public class Main {
+                              public static void main(String[] args) {
+                                  YouTubeChannel channel =
+                                          new YouTubeChannel();
+                                  Observer user1 =
+                                          new MobileUser("Sudharsan");
+                                  Observer user2 =
+                                          new EmailUser("john@gmail.com");
+                                  Observer user3 =
+                                          new MobileUser("Alex");
+                                  channel.addObserver(user1);
+                                  channel.addObserver(user2);
+                                  channel.addObserver(user3);
+                                  channel.uploadVideo(
+                                          "Observer Pattern Explained");
+                              }
+                          }
+
+
+Flow:
+                    channel.uploadVideo()
+                            |
+                            |
+                            |
+                            v
+                    latestVideo updated
+                            |
+                            |
+                            |
+                            v
+                      notifyObservers()
+                            |                   
+                            |
+       ---------------------+-------------------+
+       |                    |                   |
+       v                    v                   v
+                    
+  user3.update()      user1.update()      user2.update()
+                            
+
+The channel never directly calls:
+        emailService.sendEmail()
+              or
+        mobileService.sendNotification()
+      
+It only calls:
+        observer.update()
+        This is loose coupling.
+
+Push Model vs Pull Model
+        Observer Pattern has two variants.
+        Push Model
+            Subject sends data directly.
+            observer.update(message);
+        Observer receives everything it needs.
+
+        Pull Model
+              Subject only notifies.
+                observer.update();
+              Observer then asks:
+                subject.getLatestVideo();
+              for the required data.
+
+When to Use Observer Pattern
+    Use it when:
+          One object changes state
+          Many objects need to react
+          You don't want tight coupling
+          Event-driven architecture
+          Notifications
+          Messaging systems
+          Stock price updates
+          Chat applications
+          Spring Events
+          Kafka consumers (conceptually similar)
+
+One liner:
+        Observer Pattern defines a one-to-many dependency between objects so that when one object (Subject) changes its state, all dependent objects (Observers) are automatically notified and updated.
+        Subject
+            addObserver()
+            removeObserver()
+            notifyObservers()
+        Observer
+            update()
+        Key Benefit
+            Loose coupling between the publisher (Subject) and subscribers (Observers).
+
+
+
+
+
+
+
+
+
+
