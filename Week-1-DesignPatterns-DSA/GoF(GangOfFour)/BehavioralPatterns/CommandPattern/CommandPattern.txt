@@ -1,0 +1,282 @@
+Command Pattern
+        The Command Pattern is a behavioral design pattern that turns a request into an object.
+        Instead of directly calling a method:
+              light.turnOn();
+        you wrap the request inside a command object:
+              Command cmd = new TurnOnLightCommand(light);
+              cmd.execute();
+        The object that wants something done doesn't need to know how it is done.
+
+Why does it exist?
+        Imagine you're building a remote control.
+        Without Command Pattern
+              public class RemoteControl {
+                  private Light light;
+                  public RemoteControl(Light light) {
+                      this.light = light;
+                  }
+                  public void pressButton() {
+                      light.turnOn();
+                  }
+              }
+
+Problem 1: Tight Coupling
+            RemoteControl depends directly on Light.
+            Later you want:
+                    Fan fan = new Fan();
+            Now you need:
+                    if(deviceType.equals("LIGHT")) {
+                        light.turnOn();
+                    }
+                    else if(deviceType.equals("FAN")) {
+                        fan.start();
+                    }
+                    else if(deviceType.equals("TV")) {
+                        tv.powerOn();
+                    }
+            The remote becomes harder to maintain.
+
+Problem 2: Different Method Names
+            Every device has different APIs.
+                light.turnOn();
+                fan.start();
+                tv.powerOn();
+                musicPlayer.play();
+            RemoteControl must know every device's method.
+
+Problem 3: No Undo Support
+            Suppose the user presses:
+                ON
+                OFF
+                ON
+            How will you undo the last operation?
+            You have no history of actions.
+
+Problem 4: Queueing and Scheduling
+            Suppose you want:
+                executeLater(light.turnOn());
+            Methods cannot be stored easily.
+            You need something that represents the action itself. here we have done that using the actual objects.
+
+Solution: Encapsulate Request as Object
+              Create a common interface.
+                  public interface Command {
+                      void execute();
+                  }
+          Every action becomes a command object.
+
+Example
+          Receiver
+          The actual object that performs work.
+                public class Light {
+                    public void turnOn() {
+                        System.out.println("Light ON");
+                    }
+                    public void turnOff() {
+                        System.out.println("Light OFF");
+                    }
+                }
+
+Command Interface
+          public interface Command {
+              void execute();
+          }
+
+Concrete Commands
+        Turn On
+          public class TurnOnLightCommand implements Command {
+              private Light light;
+              public TurnOnLightCommand(Light light) {
+                  this.light = light;
+              }
+              @Override
+              public void execute() {
+                  light.turnOn();
+              }
+          }
+
+        Turn Off
+            public class TurnOffLightCommand implements Command {
+                private Light light;
+                public TurnOffLightCommand(Light light) {
+                    this.light = light;
+                }
+                @Override
+                public void execute() {
+                    light.turnOff();
+                }
+            }
+
+Invoker
+        The object that triggers commands.
+            public class RemoteControl {
+                private Command command;
+                public RemoteControl(Command command) {
+                    this.command = command;
+                }
+                public void pressButton() {
+                    command.execute();
+                }
+            }
+        Notice:
+            RemoteControl
+        knows only:
+            command.execute();
+        It doesn't know about:
+            Light
+            Fan
+            TV
+        This is the key benefit.
+
+Client
+        public class Main {
+            public static void main(String[] args) {
+                Light light = new Light();
+                Command onCommand =
+                        new TurnOnLightCommand(light);
+                RemoteControl remote =
+                        new RemoteControl(onCommand);
+                remote.pressButton();
+            }
+        }
+Output:
+        Light ON
+
+Flow:
+        Client
+          |
+          v
+        TurnOnLightCommand
+          |
+          v
+        RemoteControl
+          |
+        pressButton()
+          |
+          v
+        execute()
+          |
+          v
+        Light.turnOn()
+
+Or more conceptually:
+        Invoker ---> Command ---> Receiver
+         Remote      Action       Actual Work
+
+Real-Life Analogy
+        Think of a restaurant.
+        Customer
+            Wants food.
+        Waiter
+            Takes the order.
+        Chef
+            Actually cooks.
+        Without Command Pattern:
+            Customer --> Chef
+        The customer must directly talk to the chef.
+        With Command Pattern:
+            Customer
+                |
+                v
+             Waiter (Invoker)
+                |
+             Order Slip (Command)
+                |
+                v
+             Chef (Receiver)
+         The waiter doesn't know how to cook.
+         The chef doesn't know who the customer is.
+         The order slip (Command) connects them.
+
+What Problem Does It Solve?
+      1. Decouples Sender and Receiver
+          Without:
+              remote.turnOnLight();
+          Remote knows Light.
+          With:
+              command.execute();
+          Remote knows only Command.
+
+      2. Easy to Add New Actions
+          Want a TV command?
+              public class TurnOnTVCommand implements Command {
+                  ...
+              }
+          No changes to RemoteControl.
+          This follows the Open/Closed Principle.
+
+      3. Supports Undo/Redo
+            Command can store reverse operation.
+                public interface Command {
+                    void execute();
+                    void undo();
+                }  
+            Example:
+                command.execute();
+                history.push(command);
+            Undo:
+                history.pop().undo();
+            This is why editors like:
+                VS Code
+                IntelliJ
+                Photoshop
+                Microsoft Word
+            often use Command Pattern internally.
+
+        4. Supports Queueing
+              Store commands in a queue.
+                Queue<Command> commands = new LinkedList<>();
+              Later:
+                while(!commands.isEmpty()) {
+                    commands.poll().execute();
+                }
+              Useful in:
+                Task schedulers
+                Job processing systems
+                Message queues
+
+        5. Supports Macros
+              Store multiple commands.
+                  List<Command> macro = List.of(
+                      new TurnOnLightCommand(light),
+                      new TurnOnFanCommand(fan),
+                      new TurnOnTVCommand(tv)
+                  );
+            Execute all:
+                  for(Command cmd : macro) {
+                      cmd.execute();
+                  }
+            One button can perform multiple actions.
+
+Quick Notes
+    Participants
+        | Role             | Responsibility            |
+        | ---------------- | ------------------------- |
+        | Command          | Common interface          |
+        | Concrete Command | Encapsulates request      |
+        | Receiver         | Performs actual work      |
+        | Invoker          | Triggers command          |
+        | Client           | Creates and wires objects |
+
+When to Use
+    Use Command Pattern when:
+         You want to decouple sender and receiver
+         You need Undo/Redo
+         You need task queueing
+         You need scheduling
+         You need macro operations
+         You want actions represented as objects
+
+
+One-Line Definition
+
+Command Pattern encapsulates a request as an object, allowing requests to be parameterized, queued, logged, undone, and executed independently of the object that performs the actual work.
+
+
+
+
+
+
+
+
+
