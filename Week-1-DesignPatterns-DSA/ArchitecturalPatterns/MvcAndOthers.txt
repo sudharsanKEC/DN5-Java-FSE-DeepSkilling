@@ -1,0 +1,162 @@
+MVC is still important because:
+        It is easy to understand.
+        Spring MVC, ASP.NET MVC, Django, Rails all use it.
+        Interviewers frequently ask it.
+    But if you look at modern backend systems (Netflix, Amazon, Uber, Swiggy, etc.), you'll find architectures like:
+        Layered Architecture
+        Clean Architecture
+        Hexagonal Architecture
+        Microservices
+        Event-Driven Architecture
+    MVC is often only a small part of the system (usually the web layer).
+
+Other important architectures for placements and development:
+      As a Java/Spring developer, these are the only architectural patterns recommended to be known:
+      MVC
+          Layered Architecture (Most Important)
+          Monolithic Architecture
+          Microservices Architecture
+          Event-Driven Architecture
+          Clean Architecture (Optional but frequently discussed)
+      Everything else can wait.
+
+=============================================================================================================================================================================================
+1. Layered Architecture (Most Common)
+      This is what almost every Spring Boot application uses.
+      Structure
+            Controller Layer
+                   ↓
+            Service Layer
+                   ↓
+            Repository Layer
+                   ↓
+            Database
+      Example
+            Controller
+                ↓
+            userService.getUser()
+                ↓
+            userRepository.findById()
+                ↓
+            MongoDB
+      Flow
+            Browser
+               ↓
+            Controller
+               ↓
+            Service
+               ↓
+            Repository
+               ↓
+            Database
+        Why?
+            Separate responsibilities.
+
+        Controller
+          @GetMapping("/users/{id}")
+        Handles HTTP requests.
+
+        Service
+          public User getUser()
+        Contains business logic.
+  
+        Repository
+          userRepository.findById()
+        Database access.
+
+Advantages
+     Easy to understand
+     Easy to maintain
+     Easy to test
+     Used by most Spring applications
+Disadvantages
+     Can become tightly coupled
+     Large applications become hard to scale
+=============================================================================================================================================================================================
+
+2. Monolithic Architecture
+      This describes deployment style.
+      Everything is one application.
+      Example
+          E-Commerce App
+              - User Module
+              - Product Module
+              - Order Module
+              - Payment Module
+          All inside one Spring Boot project
+      Flow
+            User
+             ↓
+            Single Application
+             ├─ User Module
+             ├─ Product Module
+             ├─ Order Module
+             └─ Payment Module
+
+Advantages
+         Easy to develop
+         Easy to debug
+         Easy to deploy
+Disadvantages
+         Difficult to scale specific modules
+         Large codebase over time
+         One bug can affect entire application
+
+3. Microservices Architecture
+        Instead of one big application:
+              Split into many small services.
+        Example
+              Amazon-like System
+                  User Service
+                  Product Service
+                  Order Service
+                  Payment Service
+                  Notification Service
+        Each has:
+              Own code
+              Own database
+              Own deployment
+
+        Flow
+            Client
+              ↓
+            API Gateway
+              ↓
+             ├─ User Service
+             ├─ Product Service
+             ├─ Order Service
+             └─ Payment Service
+
+        Example Request
+          Place Order
+              Order Service
+                    ↓
+              Product Service
+                    ↓
+              Payment Service
+                    ↓
+              Notification Service
+
+Advantages
+    Independent deployment
+    Better scalability
+    Team autonomy
+    Failure isolation
+Disadvantages
+    Complex
+    Distributed debugging
+    Network latency
+    More infrastructure
+
+
+
+
+
+
+
+
+
+
+
+
+
