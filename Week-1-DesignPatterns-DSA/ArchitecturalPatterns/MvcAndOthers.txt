@@ -101,7 +101,7 @@ Disadvantages
          Difficult to scale specific modules
          Large codebase over time
          One bug can affect entire application
-
+========================================================================================================================================================================================================
 3. Microservices Architecture
         Instead of one big application:
               Split into many small services.
@@ -147,6 +147,158 @@ Disadvantages
     Distributed debugging
     Network latency
     More infrastructure
+========================================================================================================================================================================================================
+
+4. Event-Driven Architecture
+        Instead of directly calling another service:
+        Services communicate through events.
+
+        Traditional Approach
+                Order Service
+                      ↓
+                Payment Service
+                      ↓
+                Notification Service
+        Direct coupling.
+
+        Event-Driven Approach
+                Order Service
+                      ↓
+                "OrderCreated" Event
+                      ↓
+                Message Broker
+                      ↓
+                Payment Service
+                Notification Service
+                Inventory Service
+        Example
+                Customer places order.
+                Order Service publishes:
+                        OrderCreated
+                Other services react.
+                        Inventory Service
+                             ↓
+                        Reduce stock
+                        
+                        Notification Service
+                             ↓
+                        Send email
+                        
+                        Analytics Service
+                             ↓
+                        Update reports
+
+        Flow
+                Producer
+                   ↓
+                Message Broker
+                   ↓
+                Consumers
+
+        Technologies
+                Kafka
+                RabbitMQ
+                AWS SQS
+        Advantages
+                 Loose coupling
+                 Highly scalable
+                 Easy to add new consumers
+        Disadvantages
+                 Harder debugging
+                 Event ordering issues
+                 Eventually consistent data
+========================================================================================================================================================================================================
+
+5. Clean Architecture
+        Popular in senior-level interviews.
+        Idea:
+                Business logic should not depend on frameworks, databases, or UI.
+        Traditional Layered
+                Controller
+                 ↓
+                Service
+                 ↓
+                Repository
+                 ↓
+                Database
+        Business logic often depends on database classes.
+        Clean Architecture
+                Controller
+                      ↓
+                Use Cases
+                      ↓
+                   Domain
+                      ↑
+                Repository Interface
+                      ↑
+                Database Implementation
+        The core business logic sits in the center.
+
+        Flow
+                UI
+                 ↓
+                Controller
+                 ↓
+                Use Case
+                 ↓
+                Domain
+                 ↑
+                Repository Interface
+                 ↑
+                MongoDB Implementation
+
+        Example
+                Instead of:
+                        UserService
+                            ↓
+                        MongoRepository
+                You do:
+                        UserService
+                            ↓
+                        UserRepository Interface
+                And later:
+                        MongoUserRepository
+                        MySqlUserRepository
+                can be swapped without changing business logic.
+
+         Advantages
+                 Very testable
+                 Flexible
+                 Framework-independent
+        Disadvantages
+                 More boilerplate
+                 Overkill for small projects
+
+For Spring Boot interviews and real projects:
+        Must Know
+                1. MVC
+                2. Layered Architecture
+                3. Monolithic
+                4. Microservices
+        Then Learn
+                5. Event-Driven Architecture
+                6. Clean Architecture
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
