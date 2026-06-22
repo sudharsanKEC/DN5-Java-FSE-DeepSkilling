@@ -1,0 +1,454 @@
+What is MVC (Model-View-Controller)?
+      MVC is an architectural pattern that separates an application into three parts:
+          Model → Handles data and business logic.
+          View → Displays data to the user.
+          Controller → Receives user requests and coordinates between Model and View.
+      Real-Life Analogy: Restaurant
+          Imagine you're at a restaurant.
+                You (User) place an order.
+                Waiter (Controller) takes your order.
+                Chef (Model) prepares the food.
+                Plate with Food (View) is served back to you.
+      You never directly talk to the chef. The waiter acts as the middleman.
+
+Components
+      1. Model
+            Responsible for:
+                Data
+                Business Logic
+                Database interaction
+            Example:
+                public class User {
+                    private String name;
+                    public User(String name) {
+                        this.name = name;
+                    }
+                    public String getName() {
+                        return name;
+                    }
+                }
+            This class contains the application's data.
+
+      2. View
+            Responsible for displaying data.
+                public class UserView {
+                    public void displayUser(String name) {
+                        System.out.println("User Name: " + name);
+                    }
+                }
+            Notice:
+                No business logic
+                No database access
+                Only presentation
+
+        3. Controller
+            Responsible for handling user actions and coordinating Model and View.
+                public class UserController {
+                    private User model;
+                    private UserView view;
+                    public UserController(User model, UserView view) {
+                        this.model = model;
+                        this.view = view;
+                    }
+                    public void updateView() {
+                        view.displayUser(model.getName());
+                    }
+                }
+            The controller knows about both Model and View.
+
+            Putting Everything Together
+                public class Main {
+                    public static void main(String[] args) {
+                        User user = new User("Sudharsan");
+                        UserView view = new UserView();
+                        UserController controller =
+                                new UserController(user, view);
+                        controller.updateView();
+                    }
+                }
+            Output
+                User Name: Sudharsan
+
+Flow Diagram
+    User
+      |
+      v
+    Controller
+      |
+      v
+    Model
+      |
+      v
+    Controller
+      |
+      v
+    View
+      |
+      v
+     User
+
+
+A More Realistic Example (Spring Boot)
+      Suppose a user visits:
+        GET /users/1
+      Controller
+            @RestController
+            public class UserController {
+                @Autowired
+                private UserService userService;
+                @GetMapping("/users/{id}")
+                public User getUser(@PathVariable Long id) {
+                    return userService.getUser(id);
+                }
+            }
+
+        Model
+            @Entity
+            public class User {
+              @Id
+              private Long id;
+              private String name;
+            }
+
+        View
+            In a REST API, the JSON response acts as the View.
+              {
+                "id": 1,
+                "name": "Sudharsan"
+              }
+
+Why Do We Need MVC?
+        Without MVC, everything gets mixed together.
+        Bad Design
+            public class UserScreen {
+                public void display() {
+                    // Database code
+                    User user = database.getUser(1);
+                    // Business logic
+                    user.setName(user.getName().toUpperCase());
+                    // UI code
+                    System.out.println(user.getName());
+                }
+            }
+        Problems:
+            UI depends on database.
+            Business logic mixed with presentation.
+            Hard to test.
+            Hard to maintain.
+
+        MVC Solution
+            Model      -> Data & Logic
+            View       -> Presentation
+            Controller -> Coordination
+        Each part has a single responsibility.
+
+        One Important Interview Point
+        In MVC:
+            View does NOT directly talk to Model
+        Instead:
+            View <--> Controller <--> Model
+        The Controller acts as the mediator.
+        This separation is the main reason MVC became popular and is still used in frameworks like Spring MVC, ASP.NET MVC, Ruby on Rails, and many web applications.
+
+Question:
+      If I am building a React+Spring boot+ Mongodb fullstack application. 
+      In this, which one is the Model part, View part, and controller part?
+
+Answer:
+      In a React + Spring Boot + MongoDB application, MVC is usually applied mostly on the backend, while React itself handles the frontend UI.
+      Mapping MVC to Your Stack
+            React (Frontend)
+                  |
+                  | HTTP Request
+                  v
+            Spring Boot Controller
+                  |
+                  v
+            Spring Boot Service
+                  |
+                  v
+            MongoDB Repository
+                  |
+                  v
+               MongoDB
+
+View = React
+    Everything the user sees and interacts with:
+        function UserProfile() {
+          return (
+            <div>
+              <h1>Sudharsan</h1>
+            </div>
+          );
+        }
+    Responsibilities:
+        Display data
+        Collect user input
+        Send API requests
+    This is the View.
+
+Controller = Spring Boot Controllers
+            @RestController
+            @RequestMapping("/users")
+            public class UserController {
+            
+                @GetMapping("/{id}")
+                public User getUser(@PathVariable String id) {
+                    return userService.getUser(id);
+                }
+            }
+      Responsibilities:
+            Receive HTTP requests
+            Validate request parameters
+            Call services
+            Return responses
+      This is the Controller.
+
+Model = Domain Objects + Business Logic + Data Layer
+      In modern Spring applications, "Model" is broader than just the entity.
+      Entity
+          @Document(collection = "users")
+          public class User {
+              @Id
+              private String id;
+              private String name;
+          }
+
+       Repository
+          public interface UserRepository
+                  extends MongoRepository<User, String> {
+          }
+
+       Service
+          @Service
+          public class UserService {
+              public User getUser(String id) {
+                  return repository.findById(id)
+                          .orElseThrow();
+              }
+          }
+        All of these together are considered part of the Model layer because they handle:
+            Data
+            Business rules
+            Database interaction
+
+Complete Request Flow
+      Suppose the user clicks "Load Profile" in React.
+      1. React (View)
+            axios.get("/users/1");
+
+      2. Controller
+            @GetMapping("/{id}")
+            public User getUser(@PathVariable String id) {
+                return userService.getUser(id);
+            }
+         Receives the request.
+
+      3. Model (Service + Repository + Entity)
+            User user = repository.findById(id);
+          Fetches data from MongoDB.
+
+      4. Controller Returns Response
+            {
+              "id": "1",
+              "name": "Sudharsan"
+            }
+
+      5. React Updates UI
+            <h1>{user.name}</h1>
+          The user sees the data.
+
+One Important Thing
+      In a typical Spring Boot application, you'll often hear people say:
+          Controller Layer
+          Service Layer
+          Repository Layer
+      instead of:
+          Controller
+          Model
+          View
+      This is because modern backend architectures evolved beyond classic MVC.
+      A more realistic representation is:
+          React             -> View
+          Spring Controller -> Controller
+          Spring Service    -> Model
+          Spring Repository -> Model
+          MongoDB           -> Data Source
+
+      So in your React + Spring Boot + MongoDB project:
+          | MVC Part   | Your Technology                           |
+          | ---------- | ----------------------------------------- |
+          | View       | React Components                          |
+          | Controller | Spring Boot `@RestController`             |
+          | Model      | Entity (`@Document`), Service, Repository |
+          | Database   | MongoDB (data storage, not MVC itself)    |
+      That's why when people say Spring MVC, they usually mean the backend request flow (Controller → Model → Response), while React serves as the external View layer that consumes those responses.
+
+
+Question: If i doesnt use react js for frontend and only used the thymeleaf for frontend, then we can say that the thymeleaf is view right?
+Answer:
+      Yes, exactly.
+      If you're building a traditional Spring Boot web application using Thymeleaf, then MVC fits almost perfectly.
+      MVC with Spring Boot + Thymeleaf
+          Browser
+             |
+             v
+          Controller
+             |
+             v
+          Model
+             |
+             v
+          Thymeleaf View
+             |
+             v
+          HTML Response
+             |
+             v
+          Browser
+
+Model
+    Contains:
+        Entities
+        Services
+        Repositories
+        Business Logic
+          @Service
+          public class UserService {
+              public User getUser() {
+                  return new User("Sudharsan");
+              }
+          }
+
+
+Controller
+      Handles requests and sends data to the View.
+          @Controller
+          public class UserController {
+              @Autowired
+              private UserService userService;
+              @GetMapping("/user")
+              public String getUser(Model model) {
+                  User user = userService.getUser();
+                  model.addAttribute("user", user);
+                  return "user";
+              }
+          }
+
+      Notice:
+          return "user";
+      This tells Spring:
+          "Render the user.html Thymeleaf template."
+
+    View (Thymeleaf)
+        <!DOCTYPE html>
+        <html>
+        <body>
+            <h1 th:text="${user.name}"></h1>
+        </body>
+        </html>
+    When rendered:
+        <h1>Sudharsan</h1>
+    This is the View.
+
+Complete Flow
+    User opens:
+        http://localhost:8080/user
+    Step 1
+        Spring routes request to:
+        UserController.getUser()
+    Step 2
+        Controller calls:
+          userService.getUser()
+    Step 3
+        Service returns:
+          User("Sudharsan")
+    Step 4
+        Controller puts it into the Model:
+            model.addAttribute("user", user);
+    Step 5
+        Controller returns:
+          return "user";
+    Step 6
+        Thymeleaf (user.html) receives the model data and generates HTML.
+    Step 7
+        Browser receives the final HTML page.
+
+Why the Parameter is Named Model?
+    You may have seen this:
+          public String getUser(Model model)
+        This Model object is not your User entity.
+        It's Spring's container used to pass data from the Controller to the View.
+          model.addAttribute("user", user);
+        Think of it as a bag carrying data to Thymeleaf.
+
+Difference Between Thymeleaf MVC and React MVC
+      Spring + Thymeleaf
+          Browser
+             |
+          Controller
+             |
+          Model
+             |
+          Thymeleaf View
+             |
+          HTML
+      The server generates the HTML.
+
+React + Spring Boot
+       React (View)
+            |
+       REST API
+            |
+       Spring Controller
+            |
+          Model
+            |
+         Database
+    The server sends JSON, and React generates the HTML.
+
+So when using Thymeleaf:
+      | MVC Part   | Spring Boot Application       |
+      | ---------- | ----------------------------- |
+      | Model      | Entity + Service + Repository |
+      | Controller | `@Controller` classes         |
+      | View       | Thymeleaf templates (`.html`) |
+
+This is actually the classic textbook MVC architecture that frameworks like Spring MVC were originally designed around. React-based applications are usually closer to a client-server architecture where the View is moved entirely to the frontend.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
