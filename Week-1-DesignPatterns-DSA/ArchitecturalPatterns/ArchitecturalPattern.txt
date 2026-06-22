@@ -1,0 +1,44 @@
+What is Architectural Pattern?
+        An Architectural Pattern is a high-level blueprint for structuring an entire software system. It defines how major components of the application are organized, how they communicate, and how responsibilities are divided.
+        Think of it like this:
+            Design Patterns (Factory, Strategy, Observer, etc.) solve small-scale design problems at the class/object level.
+            Architectural Patterns solve large-scale system organization problems at the application level.
+        For example:
+            Strategy Pattern decides how a payment method is selected.
+            MVC decides how the entire application is structured.
+
+        Common Architectural Patterns 
+            Layered Architecture (N-Tier Architecture)
+            Client-Server Architecture
+            Model-View-Controller (MVC)
+            Model-View-Presenter (MVP)
+            Model-View-ViewModel (MVVM)
+            Microservices Architecture
+            Monolithic Architecture
+            Event-Driven Architecture (EDA)
+            Service-Oriented Architecture (SOA)
+            Hexagonal Architecture (Ports and Adapters)
+            Clean Architecture
+            Onion Architecture
+            Pipe-and-Filter Architecture
+            Broker Architecture
+            Peer-to-Peer (P2P) Architecture
+            Space-Based Architecture
+            Blackboard Architecture
+            Master-Slave Architecture
+            CQRS (Command Query Responsibility Segregation)
+            Serverless Architecture
+            Microkernel (Plugin) Architecture
+
+        These are the most commonly discussed architectural patterns in software engineering. If you're learning them in a practical order, follow the below:
+            Layered Architecture
+            MVC
+            Client-Server
+            Monolithic
+            Microservices
+            Event-Driven
+            Clean Architecture
+            Hexagonal Architecture
+            CQRS
+            Serverless
+        These are the ones you'll encounter most often in real-world Java/Spring applications.
