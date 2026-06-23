@@ -1,0 +1,135 @@
+Data Structures can be classified in multiple ways. The most common classification is:
+
+1. Primitive Data Structures
+      These are the basic data types provided by the language itself.
+      Examples in Java:
+              int age = 25;
+              char grade = 'A';
+              double salary = 50000.0;
+              boolean isActive = true;
+      
+      Primitive data structures:
+                int
+                long
+                float
+                double
+                char
+                boolean
+                byte
+                short
+      Think of them as the building blocks for all other data structures.
+
+2. Non-Primitive Data Structures
+      These are built using primitive data types.
+      Examples:
+            Array
+            Linked List
+            Stack
+            Queue
+            Tree
+            Graph
+            HashMap
+      These are the data structures we usually study in DSA.
+
+Non-Primitive DS Classification
+      They are further divided into:
+            A. Linear Data Structures
+                  Elements are arranged sequentially.
+                    10 → 20 → 30 → 40
+                  Each element generally has a single predecessor and successor.
+                Examples:
+                    Array
+                          [10][20][30][40]
+                    Linked List
+                           10 → 20 → 30 → 40
+                    Stack
+                          30
+                          20
+                          10
+                      LIFO (Last In First Out)
+                    Queue
+                          10 → 20 → 30 → 40
+                        FIFO (First In First Out)
+                    Deque
+                          Can insert/remove from both ends.
+                            ← 10 20 30 40 →
+            
+            B. Non-Linear Data Structures
+                    Elements are not arranged in a straight sequence.
+                    An element can connect to multiple elements.
+                Examples:
+                    Tree
+                               10
+                              /  \
+                             20   30
+                            / \
+                           40 50
+
+                    Graph
+                            A ---- B
+                            |      |
+                            |      |
+                            C ---- D
+                            
+
+Another Classification: 
+            Static vs Dynamic
+                  Static Data Structures
+                  Size is fixed.
+                  Array
+                      int[] arr = new int[100];
+                  Once created, the size is fixed.
+
+              Dynamic Data Structures
+                    Size can grow or shrink during execution.
+                Examples:
+                    Linked List
+                    Stack (Linked List based)
+                    Queue (Linked List based)
+                    Trees
+                    Graphs
+                  List<Integer> list = new ArrayList<>();
+                  You can keep adding elements.
+
+Hierarchy Diagram:
+      Data Structures
+      │
+      ├── Primitive
+      │   ├── int
+      │   ├── char
+      │   ├── double
+      │   └── boolean
+      │
+      └── Non-Primitive
+          │
+          ├── Linear
+          │   ├── Array
+          │   ├── Linked List
+          │   ├── Stack
+          │   ├── Queue
+          │   └── Deque
+          │
+          └── Non-Linear
+              ├── Tree
+              └── Graph
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
