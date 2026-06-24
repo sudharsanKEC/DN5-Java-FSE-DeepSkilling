@@ -1,0 +1,112 @@
+Let us see how arrays are represented in memory and how the accessing of array elements is O(1).
+
+Array element storage order:
+        An array stores elements in contiguous memory locations.
+        Suppose:
+            int[] arr = {10, 20, 30, 40, 50};
+        Assume that the base address is 1000.
+        Memory might look like:
+                Address      Value
+                1000         10
+                1004         20
+                1008         30
+                1012         40
+                1016         50
+        Assuming an int occupies 4 bytes.
+          Notice:
+                1000
+                1004
+                1008
+                1012
+                1016
+        The elements are stored one after another without gaps.
+        This is called contiguous memory allocation.
+
+How Access Works
+      Suppose you want:
+          arr[3]
+      The CPU does not start from the beginning and count:
+          10 -> 20 -> 30 -> 40
+      Instead, it calculates the address directly.
+      Formula:
+          Address of arr[i]
+          =
+          Base Address + (i × Size of Element)
+
+      Example
+          Base Address:
+              1000
+          Element size:
+              4 bytes
+          Find:
+              arr[3]
+          Calculation:
+              1000 + (3 × 4)
+              =
+              1012
+      Memory at address 1012:
+              40
+      So:
+            arr[3] // returns 40
+      No traversal needed.
+      That's why:
+            Array Access = O(1)
+
+      Visual Representation
+          Index:
+                   0     1     2     3     4
+                  +-----+-----+-----+-----+-----+
+                  | 10  | 20  | 30  | 40  | 50  |
+                  +-----+-----+-----+-----+-----+
+          Addresses:
+                  1000 1004 1008 1012 1016
+
+      Why Insertion is Expensive
+      Suppose:
+          [10, 20, 30, 40, 50]
+      Insert:
+          25
+      at index 2.
+      Desired:
+            [10, 20, 25, 30, 40, 50]
+      To make space:
+            30 -> move right
+            40 -> move right
+            50 -> move right
+      Many elements must shift.
+      Hence:
+          Insertion in middle = O(n)
+
+      Why Deletion is Expensive
+      Delete:
+            20
+      from:
+            [10, 20, 30, 40, 50]
+      After deletion:
+            [10, 30, 40, 50]
+      Now:
+            30 -> move left
+            40 -> move left
+            50 -> move left
+      Again shifting.
+      Therefore:
+            Deletion in middle = O(n)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
