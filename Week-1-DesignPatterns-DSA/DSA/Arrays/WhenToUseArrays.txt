@@ -1,0 +1,48 @@
+When to use arrays?
+    Arrays are one of the simplest data structures but are often the important one as well.
+    Use an array when you have a fixed or known number of similar items that you want to access quickly by their position (index).
+
+When should you use an array?
+    Use an array when:
+         All elements are of the same data type.
+         The size is fixed (or doesn't change often).
+         You need fast access to any element by its index.
+         You frequently traverse all elements.
+
+For example:
+         int[] marks = {90, 85, 78, 92, 88};
+         
+         All are integers, and you can instantly access any mark:
+         System.out.println(marks[2]);   // 78
+         This takes O(1) time.
+
+Real life examples:
+         1. Student marks:
+                Suppose a teacher has marks for 50 students. He can use an array to store those marks of those students.
+                Eg: If we assume the index as the students role numbers:
+                        The marks = [50,60,70,38,90,-1,45,....];
+                    -1 for absent students.
+
+         2. Monthly sales:
+                A company records sales for every month.
+                double[] sales = new double[12];
+                Months:
+                  January, February, March, ..., December
+                Each month has a fixed position.
+
+         3. Temperature of a week
+                int[] temperature = {31, 30, 32, 33, 29, 30, 31};
+                Each index represents one day.
+                    0 Monday
+                    1 Tuesday
+                    2 Wednesday
+                    ...
+
+
+
+
+
+
+
+
+
