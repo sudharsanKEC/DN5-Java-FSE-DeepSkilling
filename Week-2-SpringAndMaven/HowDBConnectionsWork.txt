@@ -1,0 +1,166 @@
+So lets see how DB is connected from spring boot app.
+First we need to install the specific dependency for the database we want to connect.
+For example,
+For MySQL we need to add:
+<dependency>
+	<groupId>com.mysql</groupId>
+	<artifactId>mysql-connector-j</artifactId>
+</dependency>
+
+And want to add the necessary settings for connecting to the DB in MySQL.
+That will be placed in the application.properties file
+Eg: resources/application.properties:
+	spring.application.name=spring-boot-demo
+	spring.jpa.hibernate.ddl-auto=update
+	spring.jpa.show-sql=true
+	spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/mydatabase
+	spring.datasource.username=root
+	spring.datasource.password=2005
+	server.error.include-message=always
+
+And after creating the DB mydatabase in MySQL.
+We can start our spring boot application.
+Once we have started, spring boot reads our config:
+	spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/mydatabase
+	spring.datasource.username=root
+	spring.datasource.password=2005
+
+It detects dependencies like:
+	spring-boot-starter-data-jpa
+	mysql-connector-j
+
+Then spring boot starts auto configuring everything:
+Spring Boot automatically:
+	Creates DataSource (DB connection object) using HikariCP
+	Configures Hibernate
+	Sets up JPA
+It tries connecting to DB immediately
+
+If connection fails -> Then app won't start
+If connection succeeds -> App starts immediately.
+
+And from this line, spring.jpa.hibernate.ddl-auto=update, we say how spring boot(Hibernate) should interact with the DB.
+If the value is update, then Hibernate compares our entity classes(Java) with DB Schema, then modifies the DB according to the entities.
+Some other values:
+| Value         | Behavior                          |
+| ------------- | --------------------------------- |
+| `none`        | Do nothing                        |
+| `validate`    | Check only (no changes)           |
+| `update`      | Modify schema safely              |
+| `create`      | Drop + recreate tables            |
+| `create-drop` | Create at start, drop at shutdown |
+
+Example
+If you have:
+	@Entity
+	class User {
+	    String name;
+	}
+With:
+	spring.jpa.hibernate.ddl-auto=update
+Hibernate will:
+	Check if table exists
+	If not → CREATE TABLE
+	If changed → ALTER TABLE
+
+Use this update setting only during development, learning and quick prototyping.
+ 
+Full flow:
+
+Start App
+   ↓
+Read application.properties
+   ↓
+Create DataSource (HikariCP)
+   ↓
+Connect to DB
+   ↓
+Initialize Hibernate
+   ↓
+Scan @Entity classes
+   ↓
+Apply ddl-auto rules
+   ↓
+App Ready
+
+
+
+And now lets take this example of sending a request for creating a user in the DB from Postman.
+
+Full Request Flow:
+Postman → Tomcat (Embedded Server)
+Tomcat → DispatcherServlet (Front Controller)
+DispatcherServlet → Controller
+Controller → Service
+Service → Repository
+Repository → JPA → Hibernate → HikariCP → Database
+
+
+Everytime we use Repository class objects in Service classes to do Database operations.
+Eg: userRepository.save(user);
+
+
+Lets get into some Important concepts like the below:
+1) JPA
+2) Hibernate
+3) HikariCP
+
+1) JPA(Java Persistance API):
+	JPA is NOT a tool — it's a specification (rules)
+	Defines HOW Java objects should map to DB
+	You use annotations like:
+		@Entity
+		@Id
+		@Table
+	JPA defines how ORM should work in java. It defines the rules for ORM.
+
+2) Hibernate
+	Hibernate = Implementation of JPA
+	Converts Java objects → SQL queries
+	Handles:
+		Insert, Update, Delete, Fetch
+	Automatically generates SQL
+	Example:
+		userRepository.save(user);
+	Hibernate runs:
+		INSERT INTO user ...
+
+3. HikariCP (Connection Pool)
+	Database connections are expensive
+		HikariCP manages connection pooling
+		Instead of opening new connection every time:
+		→ reuse existing ones
+	Why important?
+		Faster performance
+		Less resource usage
+
+Spring Data JPA (Very Important)
+	This is what YOU actually use most
+	public interface UserRepository extends JpaRepository<User, Integer> {
+	}
+You automatically get:
+	save()
+	findById()
+	delete()
+	findAll()
+No SQL needed (mostly)
+-----------------------------------------------------------------------------------------------------
+
+Simple Analogy (Remember This)
+	Java = Blueprint (classes)
+	JPA = Rules
+	Hibernate = Worker
+	Hikari = Transport system
+	Database = Storage
+
+
+----------------------------------------------------------------------------------------------------
+
+Hibernate is a Java library and HikaariCP is also a java library.
+
+What is proxy implementation?
+	A proxy is: An object created by Spring Framework that acts like your class but adds extra behavior behind the scenes
+
+
+Spring Data JPA automatically creates and registers repository beans for interfaces extending JpaRepository, so explicit @Repository annotation is not required.
+
