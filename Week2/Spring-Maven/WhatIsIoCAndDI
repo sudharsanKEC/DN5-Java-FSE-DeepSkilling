@@ -1,0 +1,52 @@
+Inversion Of Control(IoC) and Dependency Injection(DI) are the core features of the Spring framework.
+And understanding it theoretically is more crucial to work with SpringBoot.
+
+Assume this scenario:
+	We are writing a java program, and in every java program we must face needs of creating objects for it.
+	And creating and managing this will be done by our own.
+	And this is how usually bigger java projects also have been build by managing the object on our own.
+	And because of this there are a lot of problems arised,
+		Tight Coupling
+		Hard to change implementation
+		Difficult testing
+		Object creation scatterd everytime
+
+So to overcome this problem, Spring created IoC and DI:
+	As we know that managing the java object on our own is a tedious process, we just passes the control of managing those to the Spring itself and it is called Inversion of Control(IoC0.
+	Our control over objects now inverted to the Spring.
+	And after this, spring manages it and we can just create objects we don't want to use the new keyword at all for creating objects.
+	Spring does everything on the object for us, such as:
+		Object creation
+		Dependency Injection
+		Lifecycle Management
+	
+	Because of this we can able to achieve:
+		1) Loose Coupling
+		2) Centralized control
+			Instead of creating objects everywhere:
+				Spring manages everything in one place that is called IoC container or application context.
+				Cleaner architecture
+		3) Easier Testing
+		4) Lifecycle Management:
+			Spring handles:
+				Object Creation
+				Initialization
+				Destruction
+	And whenever we add @Autowired or any other thing for java object creation then it is called Dependency Injection.
+	I mean when the java object(dependency) was injected into the java reference variable by using new (internally by spring) then it is called Dependency Injection.
+	DI is a technique where Spring injects required dependencies into a class
+	A class does not create its dependencies — it receives them
+
+Types of Dependency Injection
+	Constructor Injection (Recommended)
+	Setter Injection
+	Field Injection (@Autowired)  less preferred
+
+Relationship Between IoC and DI
+	IoC is the concept
+	DI is the implementation technique
+	“IoC is achieved using Dependency Injection”
+
+The java objects managed by Spring is known as beans.
+A Spring Bean is a Java object that is created, managed, and controlled by the Spring IoC container
+
