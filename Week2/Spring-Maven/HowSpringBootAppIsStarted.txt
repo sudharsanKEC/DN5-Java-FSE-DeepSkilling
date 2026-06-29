@@ -1,0 +1,95 @@
+We use the command: .\mvnw spring-boot:run to run or start our springboot app.
+
+And after this, maven reads the POM.xml and downloads all the necessary dependencies before start building our project.
+And after that it compiles our java source code and generates the class files in the target folder.
+And if any dependency is missing then maven try to resolves it, resolves all spring + other libraries.
+And our app will be ready to run once our all dependencies are available.
+
+And after this, Spring boot maven plugin takes control.
+And it finds your main class (with @SpringBootApplication)
+Runs it like:
+public static void main(String[] args) {
+    SpringApplication.run(App.class, args);
+}
+
+SpringApplication.run() Starts Everything
+	This is the heart of Spring Boot
+	Step 4.1: Create Application Context
+		Creates IoC Container (ApplicationContext) --> That container that manages the java beans
+		This container will:
+		Create objects (beans)
+		Manage dependencies
+	Step 4.2: Auto Configuration Happens
+		Spring Boot checks:
+			Your dependencies (like spring-boot-starter-web)
+			Your classpath
+			Then automatically configures:
+				DispatcherServlet (for web)
+				Jackson (for JSON)
+				Database config (if present)
+			Example:
+				If it sees:
+					spring-boot-starter-web
+				It automatically sets up:
+					Spring MVC
+					Tomcat
+					REST support
+	Step 4.3: Component Scanning
+		Scans your project packages
+		Finds:
+			@Component
+			@Service
+			@Repository
+			@Controller
+		Creates objects (beans) for them
+	Step 4.4: Dependency Injection
+		Resolves @Autowired
+		Injects required objects
+		Now your classes are connected
+	Step 4.5: Embedded Server Starts
+		Starts Tomcat (or Jetty)
+		Runs on default port:
+		http://localhost:8080
+	Step 4.6: DispatcherServlet Setup
+		Central controller for all HTTP requests
+		Handles:
+			Request routing
+			Controller mapping
+	Step 4.7: Application Ready 🎉
+		Now your app:
+			Is running
+			Waiting for HTTP requests
+
+When a Request Comes
+Example:
+	GET /tasks
+Flow:
+	Request hits Tomcat
+	Goes to DispatcherServlet
+	Finds matching Controller
+	Calls method
+	Returns response (JSON)
+
+
+FULL FLOW (Super Simple)
+	mvnw.cmd
+	   ↓
+	Maven builds project
+	   ↓
+	Spring Boot plugin runs app
+	   ↓
+	SpringApplication.run()
+	   ↓
+	Create ApplicationContext
+	   ↓
+	Auto Configuration
+	  ↓
+	Component Scan
+	   ↓
+	Dependency Injection
+	   ↓
+	Start Tomcat
+	   ↓	
+	App Ready
+
+
