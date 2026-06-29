@@ -1,0 +1,151 @@
+Go to start.spring.io website
+1)Project (Build Tool)
+  This decides how your project is built, dependencies are managed, and code is packaged.
+    🔹 Gradle – Groovy
+          Uses Groovy DSL 
+          Older but very popular
+          Slightly flexible, less strict
+          Good if you follow older tutorials
+    🔹 Gradle – Kotlin 
+          Uses Kotlin DSL (build.gradle.kts)
+          Type-safe, auto-completion friendly
+          Modern & clean
+          Preferred in enterprise projects
+    🔹 Maven
+          Uses XML (pom.xml)
+          Very strict and stable
+          Most documentation/examples use Maven
+          Slightly verbose
+    For learning:
+          If you want clarity + learning, choose Maven
+
+2)Language
+  This is the language used to write your backend code.
+    🔹 Java 
+          Most Spring Boot projects use Java
+          Massive learning resources
+          Best for placements & interviews
+    🔹 Kotlin
+          Modern JVM language
+          Shorter syntax
+          Used in some companies, not all
+    🔹 Groovy
+          Rare now
+          Mostly legacy projects
+    For now: Java (no second thought)
+
+3️)Spring Boot Version
+    This is the framework version.
+    SNAPSHOT  → Experimental, unstable
+    3.5.9 / 3.x.x  → Stable & production-ready
+    Always choose latest NON-SNAPSHOT version.
+
+4️)Project Metadata
+    This defines who you are and what your app is.
+     Group
+        Example:
+        com.sudharsan
+        Like your company or domain name
+        Used internally in Java packages
+
+5)Artifact
+    demo - Your project name
+    Final output file name → demo.jar
+
+6)Name
+    demo - Display name
+    Usually same as artifact
+
+7)Description
+    Human-readable info
+    Demo project for Spring Boot
+     Package Name
+          com.sudharsan.demo
+    Where your Java classes live
+    Must follow reverse domain rule
+
+5)Packaging
+    This decides how your app is delivered.
+     JAR 
+        Standalone application
+        Embedded Tomcat
+        Run using:
+            java -jar app.jar
+     WAR
+        Used for external servers
+        Old style (Tomcat/WebLogic)
+     Always choose JAR (modern Spring Boot)
+
+7) Configuration
+      This controls how you write settings.
+       Properties
+            application.properties
+            simple
+            Beginner-friendly
+       YAML
+            application.yml
+            Cleaner structure
+            Used in large projects
+       Start with Properties
+
+8)Java Version
+    Example:
+        17  (Best)
+        21 (Too new sometimes)
+        8  (Old)
+    Choose Java 17
+
+9) Dependencies
+        This decides what your app can do.
+        Examples:
+            Spring Web → REST APIs
+            Spring Data JPA → Database
+            Spring Security → Login/Auth
+            Thymeleaf → HTML templates
+       You add only what you need.
+
+ BEST SETTINGS FOR NOW (Recommended)
+
+Project      : Maven
+Language     : Java
+Spring Boot  : 3.5.x (non-SNAPSHOT)
+Packaging    : JAR
+Java         : 17
+Config       : Properties
+Dependencies : Spring Web (start)
+
+ Simple Mental Model
+
+Think of Spring Boot like building a house:
+| Spring Option | Real World           |
+| ------------- | -------------------- |
+| Project Tool  | Construction plan    |
+| Language      | Building material    |
+| Dependencies  | Rooms & furniture    |
+| Packaging     | Final house delivery |
+| Config        | Wiring & plumbing    |
+
+Questions:
+
+1)So here the build tool concept is similar to the vite concept for react js?
+2)The spring boot itself a java framework right, the how kotlin can be used? And what type of language is Groovy?
+3)What do you mean by reverse domain rule?
+4)And why the package name should be line com.sudharsan.demo
+5) What is Group ? And where it is used exactly?
+6) So artifact is the project name? Then where does group name is used?
+7) Already we have Group name,artifact(project) name then whats this display name?
+How many names?
+8) So the project name or group name is not the package name? Whats this package name com.sudharsan.demo?
+9) What is JAR and apache tom cat?
+
+
+
+
+
+
+
+
+
+
+
+
