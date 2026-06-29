@@ -1,0 +1,24 @@
+When we start the spring boot application.
+Embedded Tomcat in springboot creates a server at localhost with port number 8080(default) and starts listening the requests for that endpoint.
+
+If a request hits the localhost:8080, tomcat delegates that request to DispatcherServlet class of SpringBoot and the DispatcherServlet class matches the request to the respective method in the controller.
+
+Servlet - It is a java class for handling HTTP requests and processing them and sending HTTP responses. And a servlet container is a system that runs servlets, manages their cycle, Handles Requests and Responses. Example: Apache Tomcat. Apache Tomcat is the servlet container in our spring boot application 
+And it was inside the DispatcherServlet in Spring along with Spring specific features.
+And from there whatever the response controller sends will be again falls back in the same order: DispatcherServlet -> Tomcat -> Client
+
+Client --> Request --> Tomcat --> DispatcherServlet --> Method In our SpringBoot application
+Data returned by SpringBoot Application --> DispatcherServlet --> Tomcat --> Request --> Client.
+
+And here another important thing is, the data sent by the client will be in JSON form and it will be converted to java object by Jackson.
+And also when the java method returns the java object to client it was again converted from java object to JSON by Jackson.
+
+Tomcat:
+	Runs the server
+	Receives HTTP requests
+	Passes them to Spring
+DispatcherServlet:
+	Brain of request handling
+	Routes to correct controller
+
+Refer the photo HowRequestsReceivedPhoto
