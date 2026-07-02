@@ -218,6 +218,303 @@ Doubts & Questions:
       IoC container will also be a set of java codes right?
 
 
+1) As EJB was more complicated, how does Spring address this problem?
+      Spring simplified enterprise Java development in several ways.
+      EJB way
+            Suppose you wanted to create a service.
+            You often needed:
+                  A Bean class
+                  Home Interface
+                  Remote Interface
+                  XML configuration
+                  EJB Container configuration
+                  Deployment descriptors
+            Something that should have taken one class could easily require multiple files.
+
+      Spring way
+            The same service could simply be:
+                  @Service
+                  public class UserService {
+                  }
+            Or even earlier versions of Spring (before annotations):
+                  <bean id="userService"
+                        class="com.example.UserService"/>
+            That's it.
+                  No special interfaces.
+                  No inheritance.
+                  No application-server-specific code.
+            Your class remains a Plain Old Java Object (POJO).
+            public class UserService {
+            }
+            Notice something?
+                  It doesn't extend anything.
+                  It doesn't implement Spring interfaces.
+                  This is one of Spring's biggest design philosophies.
+            Your business classes should remain normal Java classes.
+
+            Why is that better?
+                  Suppose tomorrow you stop using Spring.
+                  Your class still works because it is just Java.
+                  With EJB, your business class itself depended on EJB APIs.
+
+2) You said EJB is heavyweight and runs only in application servers. But every application runs on servers, right?
+            Excellent observation.
+            This is one of the most misunderstood topics.
+            The word server here has two meanings.
+            Meaning 1
+                        A physical machine (or cloud VM)
+                  Example:
+                        AWS EC2
+                        Azure VM
+                        Your office computer
+                  Every backend application ultimately runs on some machine.
+                  This is not what we mean.
+
+            Meaning 2
+                        An Application Server
+                        This is software.
+                  Examples:
+                        WebLogic
+                        WebSphere
+                        JBoss
+                        GlassFish
+                  These are Java programs whose job is to run enterprise applications.
+                  Think of them as a very advanced runtime environment.
+
+            Before Spring
+                  Suppose you developed an EJB application.
+                  You couldn't simply do:
+                        java MyApplication.jar
+                  It wouldn't work.
+                  Instead, you had to deploy it into an application server.
+                                +----------------------+
+                                | WebLogic             |
+                                |                      |
+                                |   Your EJB App       |
+                                |                      |
+                                +----------------------+
+                  The application server provides:
+                        EJB container
+                        Transactions
+                        Security
+                        Remote communication
+                        Object lifecycle
+                        Thread management
+                  Without that application server, the EJB application couldn't function.
+      
+            Why are they called heavyweight?
+                  Because application servers were huge.
+                  They contained:
+                        EJB engine, Messaging engine, Naming service, Transaction manager, Security manager, Deployment engine, Web server, Many enterprise services
+                  They consumed a lot of:
+                        Memory
+                        CPU
+                        Startup time
+                  Sometimes starting WebLogic could take minutes.
+
+            Spring's approach
+                  Spring removed this dependency.
+                  Instead of depending on an application server,
+                  Spring itself provided many of those services as Java libraries.
+                  Instead of
+                        Application
+                              ↓
+                        Application Server
+                  you now had
+                        Application
+                              ↓
+                        Spring Libraries
+                              ↓
+                             JVM
+                  Much lighter.
+
+            Then what about Tomcat?
+                        Good question.
+                        Tomcat is not an application server in the traditional Java EE sense.
+                        It is a Servlet Container (or web server for Java servlets).
+                        Spring MVC applications commonly run on Tomcat.
+                        Spring Boot even embeds Tomcat inside your application.
+                        So instead of deploying your application into Tomcat, your application starts Tomcat itself.
+                        We'll learn this in detail when we study Spring Boot.
+
+
+3) As the code is complicated, testing is also difficult with EJB?
+            Partly, but that's not the whole reason.
+            Imagine this EJB:
+                  public class PaymentBean implements SessionBean
+            This class expects an EJB Container(Session bean).
+            Without the container, many methods simply don't work.
+            So testing becomes difficult because you first need:
+                  WebLogic
+                  JBoss
+                  GlassFish
+            running.
+            Spring changed this.
+                  A Spring service is usually just:
+                        public class PaymentService {
+                        }
+                  Now testing is easy.
+                        PaymentService service = new PaymentService();
+                        assertEquals(...);
+                              No server.
+                              No container.
+                              No deployment.
+                  Just Java.
+                  This made unit testing much easier.
+
+
+4) I thought VMware founded Spring. Did Rod Johnson work there?
+            Another excellent question.
+            The timeline is important.
+            Step 1 (2002)
+                  Rod Johnson wrote the famous book:
+                        Expert One-on-One J2EE Design and Development
+                  Inside that book, he introduced the ideas that later became Spring.
+
+            Step 2 (2003-2004)
+                  Rod and a few developers built the Spring Framework.
+                  Version 1.0 was released.
+                  At this point Spring was independent.
+
+            Step 3 (2004)
+                  Rod Johnson founded Interface21.
+                  This company commercially supported Spring.
+
+            Step 4 (2009)
+                  Interface21 changed its name to
+                  SpringSource.
+
+            Step 5 (2009)
+                        VMware acquired SpringSource.
+                        Only after Spring had already become successful.
+                  So:
+                        Rod Johnson created Spring first.
+                        VMware acquired the company later.
+                        So VMware did not invent Spring.
+
+
+5) Were annotations introduced mostly as an alternative to XML configuration?
+            Yes.
+            Initially Spring configuration looked like this:
+                  <bean id="userService"
+                        class="com.example.UserService"/>
+            Large projects ended up with XML files containing thousands of lines.
+            Developers complained.
+            Spring responded by introducing annotation-based configuration.
+            Instead of XML:
+                  <bean .../>
+
+            you now write:
+                        @Service
+                        public class UserService {
+                        }
+                  or
+                        @Component
+                        public class UserService {
+                        }
+                  This makes configuration closer to the code it describes.
+                  However, XML is not obsolete. Some legacy projects and certain integration scenarios still use XML, but annotations and Java-based configuration are the modern default.
+
+
+6) Are Spring MVC and Spring Boot different libraries in Spring?
+      Yes.
+      Think of Spring as a large ecosystem.
+            Spring
+            │
+            ├── Spring Core
+            ├── Spring MVC
+            ├── Spring Data
+            ├── Spring Security
+            ├── Spring Boot
+            ├── Spring Batch
+            ├── Spring Cloud
+      Each solves different problems.
+
+      Spring Core
+            Provides:
+                  IoC
+                  DI
+                  Bean management
+            This is the foundation.
+      Spring MVC
+            Provides:
+            Controllers
+            HTTP request handling
+            REST APIs
+            Web applications
+      Spring Data
+            Makes database access easier.
+      Spring Security
+            Authentication and Authorization.
+      Spring Batch
+            Large background jobs.
+      Spring Cloud
+            Microservices support.
+      Spring Boot
+            Makes configuring and running Spring applications much easier through features like auto-configuration, starter dependencies, and embedded servers. It builds on top of the other Spring projects                rather than replacing them.
+
+
+7) What are these exactly? Libraries? Modules? Or something else?
+            This is an important terminology question.
+            Technically, each one is a separate software project, and each project is composed of multiple Java libraries (JAR files).
+            From a learner's perspective, people often call them Spring modules because they provide different functional areas.
+            For example:
+                  Spring Framework
+                  │
+                  ├── spring-core.jar
+                  ├── spring-beans.jar
+                  ├── spring-context.jar
+                  ├── spring-aop.jar
+                  ├── spring-web.jar
+                  ├── spring-webmvc.jar
+            These JARs together implement different modules.
+            So you can think of them like this:
+                        Spring Ecosystem
+                                │
+                                ├── Projects (Spring Boot, Spring Data, Spring Security, ...)
+                                │
+                                └── Each project contains one or more Java libraries (.jar files)
+            When you add a Maven dependency, you're usually adding one or more of these libraries to your project.
+
+
+8) IoC Container will also be a set of Java code, right?
+      Exactly.
+      This is one of the biggest misconceptions beginners have.
+      Many people imagine the IoC Container as some magical thing.
+      It isn't.
+      It is simply a collection of Java classes written by the Spring developers.
+      Inside those classes, Spring has implemented logic like:
+            Reading configuration (annotations, XML, or Java config)
+            Creating Java objects (beans)
+            Resolving dependencies between beans
+            Managing bean lifecycles
+            Storing beans
+            Returning beans when requested
+      Conceptually, it looks something like this (highly simplified):
+                  class SimpleContainer {
+                      Map<String, Object> beans = new HashMap<>();
+                      public void createBean(Class<?> clazz) {
+                          // create object
+                          // resolve dependencies
+                          // store in map
+                      }
+                      public Object getBean(String name) {
+                          return beans.get(name);
+                      }
+                  }
+      The real Spring IoC Container is far more sophisticated, but at its core it is Java code running on the JVM. There is no special JVM feature for IoC; Spring implements it as a framework.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
