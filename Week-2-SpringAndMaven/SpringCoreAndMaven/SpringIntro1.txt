@@ -1,0 +1,226 @@
+Introduction to the Spring Framework
+      What is Spring?
+            Spring is an open-source Java framework that simplifies the development of Java applications by providing infrastructure such as Dependency Injection (DI), Inversion of Control (IoC), Aspect-Oriented Programming (AOP), web development support, database integration, security, and much more.
+            Every major feature in Spring was created to solve a problem that Java developers were facing.
+            Spring lets developers focus on writing business logic instead of spending time creating and managing the application's infrastructure.
+            For example, instead of writing code to manually create every object and connect them together, Spring can do it automatically.
+
+      What is a Framework?
+            Before understanding Spring, let's understand what a framework is.
+            Imagine you are building a house.
+            Without a framework:
+                You make every brick yourself.
+                Build every wall.
+                Design plumbing.
+                Install electricity.
+            With a framework:
+                The foundation already exists.
+                Plumbing guidelines are provided.
+                Electrical wiring has standards.
+                You mainly focus on building your rooms.
+            Programming is similar.
+            Without a framework:
+                You write lots of repetitive code:
+                    Object creation
+                    Configuration
+                    Database connection
+                    HTTP request handling
+                    Transactions
+                    Logging
+                    Security
+             A framework provides these facilities so you can focus on your application's business logic.
+
+      Before Spring, how were Java applications developed?
+            To appreciate Spring, you need to know what Java development looked like in the late 1990s and early 2000s.
+            Java Enterprise applications mainly used:
+              Java Servlets
+              JSP (JavaServer Pages)
+              JDBC
+              Enterprise JavaBeans (EJB)
+
+      What was famous before Spring?
+              The dominant enterprise technology was EJB (Enterprise JavaBeans).
+              EJB was part of the J2EE (Java 2 Enterprise Edition) platform.
+              At that time, if a company wanted to build enterprise applications like:
+                    Banking
+                    Airlines
+                    Government systems
+                    Insurance
+                    ERP
+              they almost always used EJB.
+              It was considered the "official" enterprise Java solution.
+
+      Problems with EJB
+              Although EJB was powerful, it had many drawbacks.
+              1. Very complicated
+                    A simple service required many files.
+                    Example:
+                        CustomerBean.java
+                        CustomerHome.java
+                        CustomerRemote.java
+                        ejb-jar.xml
+                        server configuration
+                     Even a small feature needed several classes and XML files.
+
+              2. Heavyweight
+                      Applications had to run inside expensive application servers like:
+                        IBM WebSphere
+                        BEA WebLogic
+                        Oracle Application Server
+                      These consumed lots of memory and resources.
+
+              3. Difficult testing
+                      EJB components required an application server.
+                      Testing simple business logic was difficult.
+
+              4. Tight coupling
+                      Business classes depended heavily on EJB APIs.
+                  Example:
+                      public class CustomerBean
+                              implements SessionBean
+                  Your business class became dependent on EJB interfaces.
+
+              5. Lots of boilerplate code
+                       Developers spent more time configuring the application than solving business problems.
+
+        Who founded Spring?
+              Spring was created by Rod Johnson.
+              He was an Australian software engineer.
+              In 2002, he wrote a book:
+                      Expert One-on-One J2EE Design and Development
+              In that book, he criticized many complexities of EJB and proposed a simpler way of developing enterprise Java applications.
+              The example framework in his book eventually evolved into Spring.
+              Spring Framework 1.0 was officially released in 2004.
+
+        Why was Spring founded?
+              Spring was created to solve problems like:
+                      Too much XML configuration
+                      Tight coupling
+                      Difficult testing
+                      Heavy application servers
+                      Complex object creation
+                      Boilerplate code
+              Rod Johnson believed:
+                      Enterprise Java should be simple.
+              That philosophy still guides Spring today.
+
+        Why is it called "Spring"?
+              The name was chosen because it represented:
+                    a fresh beginning
+                    renewal
+                    a new approach to enterprise Java
+              Just as spring is the season when new life begins, the Spring Framework was intended to bring a fresh, lightweight way of building Java applications compared to the heavy EJB model.
+              1There isn't a deeper technical meaning behind the name.
+
+        How was Spring different?
+              Let's compare them.
+                    | EJB                         | Spring                                                  |
+                    | --------------------------- | ------------------------------------------------------- |
+                    | Heavyweight                 | Lightweight                                             |
+                    | Complex                     | Simple                                                  |
+                    | Required application server | Can run almost anywhere                                 |
+                    | Difficult testing           | Easy unit testing                                       |
+                    | Tight coupling              | Loose coupling                                          |
+                    | Large XML configuration     | Initially XML, later annotations and Java configuration |
+                    | Difficult object management | Automatic object management (IoC Container)             |
+                    | Hard dependency management  | Dependency Injection                                    |
+
+
+        The biggest innovation of Spring
+                The most revolutionary feature wasn't Spring MVC.
+                It wasn't Spring Boot.
+                It wasn't Spring Security.
+                It was Inversion of Control (IoC) together with Dependency Injection (DI).
+                This completely changed how Java applications were structured.
+                Instead of writing:
+                      Car car = new Car();
+                Spring says:
+                      "Don't create it yourself. I'll create it and give it to you when you need it."
+                This simple idea made applications:
+                      loosely coupled
+                      easier to maintain
+                      easier to test
+                      easier to extend
+
+        What is Spring well known for?
+        Spring is famous for several things.
+        
+        1. Dependency Injection (DI)
+                Automatically providing required objects instead of manually creating them.
+        2. Inversion of Control (IoC)
+                Spring manages the lifecycle of objects (called beans) and controls their creation, wiring, and destruction.
+        3. Aspect-Oriented Programming (AOP)
+                Helps separate cross-cutting concerns like:
+                      Logging
+                      Security
+                      Transactions
+                      Auditing
+                without cluttering business logic.
+        4. Spring MVC
+                A framework for building web applications and REST APIs.
+        5. Spring Boot
+                One of Spring's most popular projects.
+                It enables developers to create production-ready applications with minimal configuration, using features like auto-configuration and embedded web servers.
+        6. Data Access
+                Spring integrates seamlessly with technologies like JDBC, JPA, and Hibernate, reducing boilerplate code for database operations.
+        7. Security
+                Spring Security provides authentication, authorization, and protection against common web vulnerabilities.
+        8. Modular Design
+                Spring isn't a single monolithic framework. It's a collection of modules, so you only include what your application needs.
+                Examples include:
+                        Spring Core, Spring MVC, Spring Data, Spring Security, Spring Boot, Spring Cloud, Spring Batch.
+
+        Important concepts you'll learn in Spring
+                Everything in Spring revolves around a few core ideas:
+                    1. Bean
+                          A Java object whose lifecycle is managed by Spring.
+                    2. IoC Container
+                          The component responsible for creating, configuring, and managing beans.
+                    3. Dependency Injection (DI)
+                          A technique where the container supplies an object's dependencies instead of the object creating them itself.
+                    4. Configuration
+                          Telling Spring which beans to create and how they relate. This can be done using XML, annotations, or Java configuration classes.
+                    5. Bean Scopes
+                          Define how long a bean lives, such as one shared instance (singleton) or a new instance for each request (prototype), among others.
+                    6. Spring Boot
+                          A project built on top of Spring that dramatically simplifies application setup and configuration.
+  
+        Why is Spring so popular today?
+                Spring has become the dominant framework for Java enterprise development because it enables developers to build applications that are:
+                      Loosely coupled, making components easier to replace or modify.
+                      Highly testable, thanks to Dependency Injection.
+                      Modular, allowing you to use only the parts you need.
+                      Scalable, suitable for both small services and large enterprise systems.
+                      Productive, especially with Spring Boot reducing setup effort.
+                      Backed by a large ecosystem and a strong community.
+                Today, if you look at backend development in Java, Spring—especially Spring Boot—is the standard choice in many companies.
+
+Summary
+      Spring is an open-source framework that simplifies Java application development by managing infrastructure concerns.
+      Before Spring, enterprise Java development mainly relied on EJB, which was powerful but complex and heavyweight.
+      Rod Johnson created Spring to offer a simpler, lightweight alternative focused on clean design and easier testing.
+      Spring's core philosophy is "focus on business logic; let the framework handle the plumbing."
+      The foundation of Spring is IoC (Inversion of Control) and Dependency Injection (DI), which enable loosely coupled, maintainable, and testable applications.
+      Spring has grown into a rich ecosystem that includes Spring MVC, Spring Data, Spring Security, and Spring Boot.
+
+
+
+Doubts & Questions:
+      Problems of EJB and how spring overcomes it?
+          1)As ejb was more complicated how does spring address this problem?
+          2)You said ejb is heavy weight and want to run only in application servers, but actually every applications should have run only in big servers right? So what do you mean by that? So whats different with spring?
+          3) As the codes are complicated, testing is also difficult with EJB?
+      I thought VM ware founded and created spring, does rod was working there while proposing this idea?
+      Annotations are introduced mostly as an alternative for xml based configuration?
+      Does spring MVC, spring boot are different libraries in the spring framework?
+      Spring Core, Spring MVC, Spring Data, Spring Security, Spring Boot, Spring Cloud, Spring Batch.
+      What does everything is in the above in spring is? A library? or just a modules? or what else is that?
+      IoC container will also be a set of java codes right?
+
+
+
+
+
+
+
+
