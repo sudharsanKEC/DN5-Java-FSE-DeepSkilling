@@ -1,0 +1,108 @@
+Lets see what we should learn in IoC?
+        What is "Control"?
+        What is "Inversion"?
+        The problem before IoC.
+        IoC with real-world analogy.
+        IoC in plain Java (without Spring).
+        How Spring implements IoC.
+        What exactly is the IoC Container?
+        How object creation changes.
+        Benefits of IoC.
+        Relationship between IoC and Dependency Injection.
+        Common misconceptions.
+        Summary.
+
+
+Step 1: 
+      What is "Control"?
+        Before talking about Inversion of Control, we must first understand what "control" means.
+      Consider this class:
+          public class Engine {
+          }
+      and
+          public class Car {
+              private Engine engine;
+              public Car() {
+                  engine = new Engine();
+              }
+          }
+
+      Question:
+          Who is controlling the creation of the Engine object?
+          Answer:
+              The Car class.
+          It decides:
+              when to create it
+              how to create it
+              which constructor to call
+              how long to keep it
+          The Car class has control over the Engine.
+          Think of it like this:
+                  Car
+                   │
+                   ├── creates Engine
+                   ├── owns Engine
+                   └── controls Engine
+          So here,
+              Control = deciding how and when dependent objects are created and managed.
+
+          Another Example
+              Suppose we have:
+                    public class UserService {
+                        private UserRepository repository;
+                        public UserService() {
+                            repository = new UserRepository();
+                        }
+                    }
+               Who creates UserRepository?
+                    UserService.
+               Who owns it?
+                    UserService.
+               Who controls it?
+                    Again,
+                      UserService.
+
+               What is the Problem?
+                      At first glance, this looks perfectly fine.
+                    Why would anyone complain?
+                        Let's make the project a little bigger.
+                            Controller
+                                ↓
+                            Service
+                                ↓
+                            Repository
+                                ↓  
+                            Database
+
+                Imagine:
+                        UserController
+                    creates
+                        UserService
+                    which creates
+                        UserRepository
+                    which creates
+                        DatabaseConnection
+                Every class creates the next one.
+                          
+                          Controller
+                                │
+                                ▼
+                          new Service()
+                          
+                                │
+                                ▼
+                          new Repository()
+                          
+                                │
+                                ▼
+                          new DatabaseConnection()
+                Each class is responsible for creating another class.
+
+
+
+
+
+
+
+
+
