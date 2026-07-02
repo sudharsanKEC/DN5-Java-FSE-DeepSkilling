@@ -15,290 +15,197 @@ Questions from doubts?
       (Once you answer that, you'll naturally understand why Spring needs an IoC Container and what it actually does internally.)
 
 Answer:
-    You're very close. In fact, your mental model is about 80–90% correct. Let me refine it, because there is one important detail.
-    You said:
-        "The IoC container manages the beans, it just calls every class constructor (through creating an object of it using new keyword) and from that the IoC passes the object to the constructor."
-    Yes, that's fundamentally what happens. But let's walk through it carefully.
-
+        You're very close. In fact, your mental model is about 80–90% correct. Let me refine it, because there is one important detail.
+        You said:
+            "The IoC container manages the beans, it just calls every class constructor (through creating an object of it using new keyword) and from that the IoC passes the object to the constructor."
+              Yes, that's fundamentally what happens. But let's walk through it carefully.
 Consider these classes
-@Component
-public class UserRepository {
-
-}
-@Component
-public class UserService {
-
-    private UserRepository repository;
-
-    public UserService(UserRepository repository) {
-        this.repository = repository;
-    }
-}
-
-Notice:
-
-UserService needs a UserRepository.
-
-During application startup
-
-When your Spring application starts,
-
-the IoC Container begins its work.
-
-Conceptually, it does something like this:
-
-Start Application
-
-        ↓
-
-Scan classes
-
-        ↓
-
-Find @Component classes
-
-        ↓
-
-Need UserRepository?
-
-        ↓
-
-Create UserRepository
-
-        ↓
-
-Need UserService?
-
-        ↓
-
-UserService constructor requires UserRepository
-
-        ↓
-
-Pass previously created UserRepository
-
-        ↓
-
-Create UserService
-
-        ↓
-
-Store both as beans
-
-So yes,
-
-the container is essentially doing something conceptually similar to:
-
-UserRepository repo = new UserRepository();
-
-UserService service = new UserService(repo);
-
-The important part is:
-
-Your code never writes these new statements. Spring does.
-
-Does Spring literally use the new keyword?
-
-This is a fantastic question.
-
-Internally, Spring does create objects.
-
-Sometimes it's equivalent to
-
-new UserRepository();
-
-But internally it often uses Java Reflection, for example:
-
-Constructor<?> constructor = clazz.getConstructor();
-
-Object obj = constructor.newInstance();
-
-or
-
-clazz.getDeclaredConstructor().newInstance();
-
-Reflection allows Spring to create objects without knowing the class at compile time.
-
-For example,
-
-Spring doesn't hardcode:
-
-new UserService();
-
-Instead it discovers the class dynamically.
-
-Imagine it finds this class during scanning:
-
-@Component
-public class PaymentService {
-}
-
-Spring didn't know this class even existed when Spring itself was compiled years ago!
-
-So it uses reflection to instantiate it dynamically.
-
-Then how does Spring know what to pass?
-
-This is where Spring becomes really intelligent.
-
-Suppose:
-
-public UserService(UserRepository repository)
-
-Spring looks at the constructor and thinks:
-
-"This constructor requires a UserRepository."
-
-Then it checks:
-
-Do I already have a UserRepository bean?
-
-If yes:
-
-Pass it.
-
-If no:
-
-Create one first.
-
-So Spring is constantly building a dependency graph.
-
-Imagine:
-
-Controller
-
-↓
-
-Service
-
-↓
-
-Repository
-
-↓
-
-Database
-
-Spring works from the bottom upward.
-
-Create Database
-
-↓
-
-Create Repository(Database)
-
-↓
-
-Create Service(Repository)
-
-↓
-
-Create Controller(Service)
-
-Everything is connected automatically.
-
-Your sentence can be improved slightly
-
-You said:
-
-"The IoC passes the object to the constructor."
-
-A more accurate wording is:
-
-The IoC Container first creates the required dependency beans, then while creating a bean, it resolves its constructor parameters and injects the appropriate bean instances into that constructor.
-
-Notice the order.
-
-It doesn't create everything randomly.
-
-It creates them in dependency order.
-
-Here's an interesting challenge
-
-Suppose we have:
-
-@Component
-class A {
-
-    public A(B b) {
-
-    }
-}
-@Component
-class B {
-
-    public B(C c) {
-
-    }
-}
-@Component
-class C {
-
-}
-
-When the application starts, which bean do you think Spring creates first?
-
-A ?
-
-B ?
-
-C ?
-
-Think about it before scrolling.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-The answer is:
-
-Create C
-
-↓
-
-Create B(C)
-
-↓
-
-Create A(B)
-
-Because A cannot exist until B exists.
-
-B cannot exist until C exists.
-
-Spring analyzes these constructor dependencies and builds the objects in the correct order.
-
-One final refinement
-
-Earlier, we defined IoC as:
-
-The control of object creation is transferred from your classes to the container.
-
-Now you can see that this isn't just a slogan.
-
-Instead of your code doing:
-
-UserRepository repo = new UserRepository();
-UserService service = new UserService(repo);
-
-Spring effectively performs those steps (using reflection and bean management), wires the dependencies together, stores the resulting objects as beans, and gives you access to them when needed.
-
-So yes—you've understood the core idea correctly. The next step is to learn what the IoC Container actually is (specifically BeanFactory and ApplicationContext), how it stores beans, and how it decides which bean to inject when multiple candidates exist. That's where the internal mechanics become really interesting.
-
-
-
-
-
-
-
+              @Component
+              public class UserRepository {
+              }
+              @Component
+              public class UserService {
+                  private UserRepository repository;
+                  public UserService(UserRepository repository) {
+                      this.repository = repository;
+                  }
+              }
+      Notice:
+            UserService needs a UserRepository.
+            During application startup
+                When your Spring application starts,
+                the IoC Container begins its work.
+                Conceptually, it does something like this:
+                        Start Application
+                              ↓
+                          Scan classes
+                              ↓
+                      Find @Component classes
+                              ↓
+                        Need UserRepository?
+                              ↓
+                        Create UserRepository
+                              ↓
+                          Need UserService?
+                              ↓
+                          UserService constructor requires UserRepository
+                              ↓
+                    Pass previously created UserRepository
+                              ↓
+                        Create UserService
+                              ↓
+                      Store both as beans
+          So yes,
+              the container is essentially doing something conceptually similar to:
+                    UserRepository repo = new UserRepository();
+                    UserService service = new UserService(repo);
+              The important part is:
+                    Your code never writes these new statements. Spring does.
+              Does Spring literally use the new keyword?
+                    This is a fantastic question.
+                    Internally, Spring does create objects.
+              Sometimes it's equivalent to
+                    new UserRepository();
+              But internally it often uses Java Reflection, for example:
+                    Constructor<?> constructor = clazz.getConstructor();
+                    Object obj = constructor.newInstance();
+                        or
+                    clazz.getDeclaredConstructor().newInstance();
+              Reflection allows Spring to create objects without knowing the class at compile time.
+              For example,
+                    Spring doesn't hardcode:
+                            new UserService();
+                    Instead it discovers the class dynamically.
+                    Imagine it finds this class during scanning:
+                            @Component
+                            public class PaymentService {
+                            }
+                    Spring didn't know this class even existed when Spring itself was compiled years ago!
+                    So it uses reflection to instantiate it dynamically.
+
+            Then how does Spring know what to pass?
+                    This is where Spring becomes really intelligent.
+                Suppose:
+                    public UserService(UserRepository repository)
+                    Spring looks at the constructor and thinks:
+                          "This constructor requires a UserRepository."
+                    Then it checks:
+                            Do I already have a UserRepository bean?
+                    If yes:
+                            Pass it.
+                    If no:
+                            Create one first.
+              So Spring is constantly building a dependency graph.
+
+              Imagine:
+                      Controller
+                      ↓
+                      Service
+                      ↓
+                      Repository
+                      ↓
+                      Database
+              Spring works from the bottom upward.
+                    Create Database
+                        ↓
+                    Create Repository(Database)
+                        ↓
+                    Create Service(Repository)
+                        ↓
+                    Create Controller(Service)
+              Everything is connected automatically.
+            Your sentence can be improved slightly
+            You said:
+                  "The IoC passes the object to the constructor."
+            A more accurate wording is:
+                    The IoC Container first creates the required dependency beans, then while creating a bean, it resolves its constructor parameters and injects the appropriate bean instances into that constructor.
+                    Notice the order.
+            It doesn't create everything randomly.
+            It creates them in dependency order.
+
+      Here's an interesting challenge
+          Suppose we have:
+                @Component
+                class A {
+                    public A(B b) {
+                    }
+                }
+  
+                @Component
+                class B {
+                    public B(C c) {
+                    }
+                }
+
+                @Component
+                class C {
+                }
+        When the application starts, which bean do you think Spring creates first?
+                A ?
+                B ?
+                C ?
+        Think about it.
+        The answer is:
+              Create C
+              ↓
+              Create B(C)
+              ↓
+              Create A(B)
+        Because A cannot exist until B exists.
+        B cannot exist until C exists.
+        Spring analyzes these constructor dependencies and builds the objects in the correct order.
+
+        One final refinement
+            Earlier, we defined IoC as:
+                    The control of object creation is transferred from your classes to the container.
+            Now you can see that this isn't just a slogan.
+            Instead of your code doing:
+                  UserRepository repo = new UserRepository();
+                  UserService service = new UserService(repo);
+            Spring effectively performs those steps (using reflection and bean management), wires the dependencies together, stores the resulting objects as beans, and gives you access to them when needed.
+            The next step is to learn what the IoC Container actually is (specifically BeanFactory and ApplicationContext), how it stores beans, and how it decides which bean to inject when multiple candidates exist. That's where the internal mechanics become really interesting.
+
+Question:
+        How does the IoC container injects the object for various DIs like constructor injection and using @Autowired, and is there anyother kind of ways thats used for DI?
+
+Answer:
+      Lets understand how.
+      Step 1: Spring starts
+              Suppose we have:
+
+                  @Component
+                  public class UserRepository {
+                  }
+
+                  @Component
+                  public class UserService {
+                      private UserRepository repository;
+                      public UserService(UserRepository repository) {
+                          this.repository = repository;
+                      }
+                  }
+
+              When the application starts,
+              Spring scans your classes.
+                    @Component
+                        ↓
+                    Finds
+                      UserRepository
+                      UserService
+                    Now Spring says,
+                        "These are beans I need to manage."
+
+        Step 2: Spring analyzes constructors
+              Spring looks at UserService.
+              It finds
+                    public UserService(UserRepository repository)
+              Spring immediately knows:
+                    "To create UserService, I first need a UserRepository."
+              So internally, Spring creates something similar to this dependency graph:
+                    UserService
+                          │
+                          ▼
+                    UserRepository
 
 
 
