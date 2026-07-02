@@ -98,10 +98,44 @@ Step 1:
                           new DatabaseConnection()
                 Each class is responsible for creating another class.
 
+                Why is this a problem?
+                        Imagine your application has:
+                                200 services
+                                150 repositories
+                                100 helper classes
+                        Now every class contains lots of:
+                                new Something()
+                        Suppose tomorrow you decide:
+                        Instead of
+                                MySQLRepository
+                        you want
+                                PostgresRepository
+                        Every place where you wrote:
+                                new MySQLRepository()
+                        must change.
+                        Your business logic is now mixed with object creation logic.
 
+                The Bigger Problem: Tight Coupling
 
+Suppose:
 
+public class UserService {
 
+    private UserRepository repository =
+            new UserRepository();
+}
+
+Now ask yourself:
+
+Can this service ever use another repository?
+
+No.
+
+Because it has already decided:
+
+"I will always use UserRepository."
+
+That decision is permanently inside the class.
 
 
 
