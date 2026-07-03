@@ -1,0 +1,213 @@
+Complete Maven Tutorial
+      Learning Roadmap
+      We'll cover Maven in this order:
+                        1.   Why Build Tools Exist
+                        2.   What Maven Is
+                        3.   Problems Maven Solves
+                        4.   Maven Architecture
+                        5.   Installing Maven
+                        6.   Creating a Maven Project
+                        7.   Maven Project Structure
+                        8.   Understanding pom.xml
+                        9.   Maven Coordinates (GroupId, ArtifactId, Version)
+                        10.  Dependencies
+                        11.  Dependency Transitive Resolution
+                        12.  Maven Repository System
+                        13.  Maven Lifecycle
+                        14.  Maven Plugins
+                        15.  Common Maven Commands
+                        16.  Scopes
+                        17.  Packaging Types
+                        18.  Profiles
+                        19.  Multi-module Projects
+                        20.  Maven Best Practices
+                        21.  Maven in Spring Boot
+                        22.  Real Industry Workflow
+
+
+Chapter1:
+    Chapter 1
+        Why Do We Need Maven?
+            Let's go back to plain Java.
+            Suppose you create a Java application.
+                    Calculator/
+                        Main.java
+            Compile:
+                    javac Main.java
+            Run:
+                    java Main
+            Easy.
+        
+        Now suppose you need JSON support.
+        You decide to use Jackson.
+        Without Maven:
+              Download jackson-core.jar
+              Download jackson-databind.jar
+              Download jackson-annotations.jar
+        Now your project becomes
+              Calculator/
+                  Main.java
+              lib/
+                  jackson-core.jar
+                  jackson-databind.jar
+                  jackson-annotations.jar
+        Compile
+              javac -cp lib/* Main.java
+        Run
+            java -cp lib/* Main
+        Already becoming messy.
+
+        Now imagine your project needs
+              Spring
+              Hibernate
+              MySQL Driver
+              JWT
+              Lombok
+              Logback
+              JUnit
+              Mockito
+        Instead of 3 jars you'll now have
+        lib/
+            150 jars
+        Questions arise:
+              Which version?
+              Where to download?
+              Compatible versions?
+              Missing dependencies?
+              Updating versions?
+              Sharing with teammates?
+        It becomes impossible manually.
+        This is exactly why build tools were invented.
+
+What is a Build Tool?
+          A build tool automates everything required to convert source code into a runnable application.
+          Instead of manually doing
+                    Compile
+                    ↓
+                    Download libraries
+                    ↓
+                    Package
+                    ↓
+                    Test
+                    ↓
+                    Create Jar
+                    ↓
+                    Run
+          A build tool performs all of it.
+          Popular Java build tools
+                  Maven
+                  Gradle
+                  Ant (older)
+          Spring officially supports Maven and Gradle.
+
+What is Maven?
+    Maven is
+        A project management and build automation tool.
+        It handles
+            dependency management
+            compilation
+            testing
+            packaging
+            project structure
+            plugins
+            version management
+        Instead of downloading jars manually,
+        you simply say
+            "I need Spring."
+        Maven downloads everything automatically.
+        Example
+            Instead of
+                  Download
+                        spring-core.jar
+                        spring-beans.jar
+                        spring-context.jar
+                        spring-expression.jar
+                        ...
+            You simply write
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                        <version>6.2.1</version>
+                    </dependency>
+              Maven downloads everything.
+              
+              Maven Architecture
+                    Think of Maven as a manager.
+                          Developer
+                               |
+                               |
+                          Writes pom.xml
+                               |
+                               ▼
+                            Maven
+                               |
+                               |
+                          Downloads libraries
+                          Compiles project
+                          Runs tests
+                          Packages application
+                          Creates JAR
+                          Creates WAR
+                    You only configure.
+                    Maven performs the work.
+
+      The Heart of Maven
+            Everything revolves around one file.
+                pom.xml
+            POM means
+                Project Object Model
+            Think of it as Maven's instruction manual.
+            Example
+                  Project/
+                  src/
+                  pom.xml
+            Whenever Maven runs,
+            it first reads
+                  pom.xml
+            Everything comes from this file.
+
+        Chapter 2
+            Installing Maven
+        Check Java  
+              java -version
+            Need JDK installed.
+        Check javac
+            javac -version
+        Check Maven
+            mvn -version
+        Output
+            Apache Maven 3.9.x
+            Java 21
+            OS Linux
+        If this works,
+          Maven is installed correctly.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
