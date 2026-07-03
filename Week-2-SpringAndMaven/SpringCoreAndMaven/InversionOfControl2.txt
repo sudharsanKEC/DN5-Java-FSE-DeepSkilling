@@ -207,6 +207,162 @@ Answer:
                           ▼
                     UserRepository
 
+        Step 3: Create dependencies first
+              Spring first creates
+                      UserRepository repository =
+                              new UserRepository();
+              (using reflection internally)
+              Now it stores it.
+              Think of a huge internal map.
+              Bean Storage
+                    UserRepository
+                           │
+                           ▼
+                     0xABCD1234
+              Now Spring has a repository object available.
+
+        Step 4: Create UserService
+              Now Spring performs
+              Conceptually:
+                    UserService service =
+                            new UserService(repository);
+              Notice:
+                    Spring is literally calling the constructor.
+                    It simply supplies the parameter.
+
+      This is Constructor Injection
+              So Constructor Injection is actually very simple.
+              Spring does
+                    new UserService(existingRepositoryObject)
+              instead of
+                    new UserService()
+              That's all.
+
+      What about @Autowired?
+          Consider
+                @Component
+                public class UserService {
+                    @Autowired
+                    private UserRepository repository;
+                }
+          Now there is no constructor.
+        Question:
+            How can Spring put something into the field?
+
+          Step 1
+              Spring first creates the object.
+              Conceptually
+                    UserService service =
+                            new UserService();
+              Notice
+                  The repository is still
+                      null
+              At this point.
+
+          Step 2
+              Spring scans the fields.
+              It sees
+                  @Autowired
+                  private UserRepository repository;
+              It says
+                  "This field requires a UserRepository bean."
+
+          Step 3
+              Spring finds the bean.
+                  UserRepository
+                  ↓
+                  Object already exists
+
+          Step 4
+              Now Spring uses Reflection.
+              Normally Java says
+                      service.repository = repo;
+              is illegal because the field is private.
+              But Reflection can bypass access control.
+              Conceptually Spring does something like
+                    Field field =
+                        UserService.class.getDeclaredField("repository");
+                    field.setAccessible(true);
+                    field.set(service, repositoryBean);
+                Now
+                    service.repository
+                contains the object.
+
+                So Field Injection happens after object creation.
+                Constructor Injection happens during object creation.
+                This is an important difference.
+              Setter Injection
+              Suppose
+                  @Component
+                  public class UserService {
+                      private UserRepository repository;
+                      @Autowired
+                      public void setRepository(UserRepository repository) {
+                          this.repository = repository;
+                      }
+                  }
+
+              Now Spring
+                    creates the object first
+                    UserService service =
+                            new UserService();
+                Then later
+                    calls
+                        service.setRepository(repositoryBean);
+                Again,
+                    Spring simply invokes the setter.
+
+          Ways of Dependency Injection in spring:
+                In Spring, Dependency Injection (DI) is the process where the IoC (Inversion of Control) container injects dependent objects into a bean. There are three main types of dependency injection supported by Spring.
+                1. Constructor Injection
+                      In Constructor Injection, the DI container invokes a constructor with a number of arguments, each representing a dependency.
+                      How it looks: You annotate the constructor with @Autowired (though @Autowired is optional if the class has only one constructor).
+                      When to use it: This is the recommended approach for most scenarios. It ensures the bean is immutable and never initialized in a partial, broken state.
+                      @Component
+                      public class Car {
+                          private final Engine engine;
+                          // @Autowired is optional here in modern Spring
+                          public Car(Engine engine) {
+                              this.engine = engine;
+                          }
+                      }
+
+                2. Setter Injection
+                          In Setter Injection, the container calls setter methods on your beans after invoking a no-argument constructor or a no-argument static factory method to instantiate your bean.
+                          How it looks: You place the @Autowired annotation directly above the setter method.
+                          When to use it: Use this for optional or changeable dependencies that can be assigned or altered later without reinstantiating the class.
+                            @Component
+                            public class Car {
+                                private Engine engine;
+                            
+                                @Autowired
+                                public void setEngine(Engine engine) {
+                                    this.engine = engine;
+                                }
+                            }
+
+                  3. Field Injection
+                              With Field Injection, dependencies are injected directly into the fields of a class using Java Reflection.
+                              How it looks: You place the @Autowired annotation directly on the private class variables.
+                              When to use it: While it looks the cleanest and requires the least amount of boilerplate code, it is generally discouraged. It makes unit testing harder (because you can't easily pass mock objects without reflection) and hides architectural code smells (like having too many dependencies).
+                              @Component
+                              public class Car {
+                                  @Autowired
+                                  private Engine engine; // Injected directly into the field
+                              }
+
+Feature                     Constructor Injection                          Setter Injection                               Field Injection
+Immutability              Yes (Fields can be final)                       No (Fields cannot be final)                       No (Fields cannot be final)
+
+Null Safety                   High                                        Low (Can result in NullPointerException)          Low (Can result in NullPointerException)
+                          (Bean won't initialize without it)
+
+Ease of Testing           Easy (Can pass mocks via new Class(mock))      Easy (Can use setter methods)                    Hard (Requires Mockito runners or reflection)
+
+Spring Recommendation        Recommended,                            Use for optional dependencies                       Discouraged
+
+
+
 
 
 
