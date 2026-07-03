@@ -1,0 +1,80 @@
+AOP (Aspect-Oriented Programming) Module
+
+What is the AOP Module?
+      The AOP Module provides support for Aspect-Oriented Programming, which helps separate cross-cutting concerns from your business logic.
+      Instead of writing the same code repeatedly in many methods, AOP lets you define that behavior once and apply it automatically where needed.
+
+Libraries in the AOP Module
+| Library          | Purpose                                         |
+| ---------------- | ----------------------------------------------- |
+| `spring-aop`     | Core AOP support                                |
+| `spring-aspects` | Integration with AspectJ and additional aspects |
+
+
+What Problems Does AOP Solve?
+      Imagine every service method looks like this:
+      public void transferMoney() {
+            log();
+            checkPermission();
+            startTransaction();
+            // Business Logic
+            commitTransaction();
+      }
+
+      Now imagine you have 500 methods.
+      You'll repeat:
+              Logging
+              Security checks
+              Transactions
+              Auditing
+      everywhere.
+      This leads to duplicated code.
+
+AOP Solution
+      Instead of writing those statements manually,
+      Spring automatically executes them.
+              Request
+                  │
+                  ▼
+              Logging Aspect
+                  │
+                  ▼
+              Security Aspect
+                  │
+                  ▼
+              Transaction Aspect
+                  │
+                  ▼
+              Business Method
+                  │
+                  ▼
+              Commit Transaction
+        Your business method now becomes:
+              public void transferMoney() {
+                  // Only business logic
+              }
+
+      Responsibilities of the AOP Module
+              Method interception
+              Logging
+              Transaction management
+              Security
+              Auditing
+              Performance monitoring
+
+      What You Should Know as a Spring Boot Developer
+            You don't always write your own aspects, but you use AOP indirectly every day.
+            Some common examples:
+                  @Transactional
+                  Method security annotations like @PreAuthorize
+                  Logging frameworks
+                  Performance monitoring tools
+            All of these often rely on Spring AOP behind the scenes.
+            Important: Spring AOP works mainly by creating proxy objects. Instead of calling your bean directly, Spring gives you a proxy that can execute extra logic (like starting a transaction or checking permissions) before and after invoking your actual method. We'll explore proxies and AOP internals in detail when we study the AOP module.
+
+
+
+
+
+
+
