@@ -1,0 +1,50 @@
+Core Container Module 
+        What is the Core Container Module?
+              The Core Container is the foundation of the Spring Framework.
+              It provides the functionality required to:
+                        Create objects (Beans)
+                        Manage object lifecycle
+                        Perform Dependency Injection
+                        Implement Inversion of Control (IoC)
+              Without the Core Container, there is essentially no Spring.
+
+              Libraries in the Core Container
+                        | Library             | Purpose                                                       |
+                        | ------------------- | ------------------------------------------------------------- |
+                        | `spring-core`       | Fundamental utilities used by Spring                          |
+                        | `spring-beans`      | Bean creation and lifecycle management                        |
+                        | `spring-context`    | Provides `ApplicationContext` and advanced container features |
+                        | `spring-expression` | Spring Expression Language (SpEL) support                     |
+
+                Responsibilities of the Core Container
+                        Manages the IoC Container
+                        Creates and stores beans
+                        Injects dependencies
+                        Manages bean lifecycle
+                        Supports component scanning (@Component)
+                        Provides ApplicationContext
+                What You Should Know as a Spring Boot Developer
+                          Bean – An object managed by Spring.
+                          IoC (Inversion of Control) – Spring controls object creation.
+                          Dependency Injection (DI) – Spring injects dependencies into beans.
+                          ApplicationContext – The advanced IoC Container you'll use in almost every Spring Boot application.
+                          Bean Lifecycle – How Spring creates, initializes, and destroys beans.
+                          Bean Scopes – Singleton, Prototype, Request, Session, etc.
+                These concepts are the backbone of Spring Boot. Nearly every annotation you use (@Component, @Service, @Repository, @Autowired, @Bean, etc.) relies on the Core Container.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
