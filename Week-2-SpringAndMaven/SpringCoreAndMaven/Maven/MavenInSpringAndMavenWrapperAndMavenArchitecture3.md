@@ -1,3 +1,26 @@
+C:\Users\sudha>mvn -version
+Apache Maven 3.9.13 (39d686bd50d8e054301e3a68ad44781df6f80dda)
+Maven home: E:\DevTools\apache-maven-3.9.13
+Java version: 21.0.9, vendor: Amazon.com Inc., runtime: C:\Program Files\Amazon Corretto\jdk21.0.9_10
+Default locale: en_IN, platform encoding: UTF-8
+OS name: "windows 11", version: "10.0", arch: "amd64", family: "windows"
+
+C:\Users\sudha>
+
+Maven is installed globally in my laptop?
+
+But I do have this mvnw and mvnw.cmd files in my project. When i run ./mvnw spring-boot:run. When I run this, whether the global maven is handling my project or the project's specific maven?
+I have installed my spring boot project through start.spring.io
+Does maven is a build tool only for java and tied to it? How does maven influences the java project folder structures and spring/springboot project folder structures?
+Does we need java for installing maven.
+But I want to create my own maven project without intellij.
+
+Teach me from step 4. from maven architecture to real industry workflow. teach me one by one.
+Now start with the maven architecture.
+
+
+
+
 # Chapter 4 – Maven Architecture
 
 Before learning Maven Architecture, let's answer some common questions that every beginner has.
