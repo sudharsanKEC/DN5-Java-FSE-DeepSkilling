@@ -1,4 +1,3 @@
-````markdown id="mvninst01"
 # Installing Maven (Overview)
 
 Before using Maven, you must install the **Java Development Kit (JDK)** because Maven itself is a Java application.
