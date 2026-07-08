@@ -1,0 +1,12 @@
+Accounts(
+    AccountID,
+    CustomerID,
+    AccountType,
+    Balance
+)
+Employees(
+    EmployeeID,
+    EmployeeName,
+    Department,
+    Salary
+)
