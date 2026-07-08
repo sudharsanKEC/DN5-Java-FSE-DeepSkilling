@@ -22,3 +22,14 @@ public class FinancialForecast {
         System.out.printf("Future Value after %d years = %.2f", years, future);
     }
 }
+
+// TC: O(n)
+// SC: O(n)
+
+
+
+
+
+
+
+
