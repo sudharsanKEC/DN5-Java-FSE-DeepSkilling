@@ -1,0 +1,13 @@
+Customers(
+    CustomerID,
+    Name,
+    Age,
+    Balance,
+    IsVIP
+)
+Loans(
+    LoanID,
+    CustomerID,
+    InterestRate,
+    DueDate
+)
