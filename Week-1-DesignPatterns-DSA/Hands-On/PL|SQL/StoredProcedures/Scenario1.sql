@@ -12,3 +12,36 @@ BEGIN
 
 END;
 /
+
+BEGIN
+    ProcessMonthlyInterest;
+END;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
