@@ -1,0 +1,43 @@
+<!-- This below is called the XML Declaration. It's not specific to Spring—it's part of the XML standard itself. -->
+<!-- version="1.0" This tells the XML parser: "This document follows the XML 1.0 specification."-->
+<!-- 
+encoding="UTF-8"
+        This tells the XML parser how the file is encoded.
+        Remember, every file on disk is just bytes.
+        For example, the letter:
+            A
+        must be stored as bytes.
+        Different encodings store characters differently.
+        Examples include:
+                ASCII
+                UTF-8
+                UTF-16
+                ISO-8859-1
+        Spring recommends UTF-8 because it supports virtually every language.
+        For example, if your XML contains:
+            <name>Sudharsan</name>
+            <city>தமிழ்நாடு</city>
+            <country>日本</country>
+        UTF-8 correctly stores all these characters. -->
+
+<!-- 
+
+
+ -->
+<?xml version="1.0" encoding="UTF-8">
+
+<beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation=" 
+           http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd" >
+    
+    <bean id="userRepository"
+        class="com.sudharsan.UserRepository"
+    />
+
+    <bean id="userService"
+        class="com.sudharsan.UserService"
+    />
+</beans>
