@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -82,6 +84,9 @@ public class Main {
                         System.out.println(products.get(productId).toString());
                     }
                     System.out.println("Display finished.");
+                }
+                case 6:{
+                    break;
                 }
                 default:{
                     System.out.println("Enter a valid choice.");
