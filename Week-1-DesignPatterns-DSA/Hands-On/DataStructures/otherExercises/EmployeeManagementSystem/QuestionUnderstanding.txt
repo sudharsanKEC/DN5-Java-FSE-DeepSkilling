@@ -1,0 +1,2 @@
+Maintaining the Employees in an array.
+And performing operations like employee addition, searching, traversal and deletion.
