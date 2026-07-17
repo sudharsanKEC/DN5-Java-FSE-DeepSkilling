@@ -1,0 +1,2 @@
+Want to develop a code for Inventory Management System using DS concepts.
+The efficient retrieval of the datas are very crucial.
