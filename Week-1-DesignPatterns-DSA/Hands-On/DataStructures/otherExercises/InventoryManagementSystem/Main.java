@@ -95,5 +95,6 @@ public class Main {
             
 
         }while(choice!=6);
+        System.out.println("Inventory management terminated.");
     }
 }
