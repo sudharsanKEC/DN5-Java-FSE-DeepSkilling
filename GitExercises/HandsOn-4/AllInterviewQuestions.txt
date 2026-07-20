@@ -1,0 +1,82 @@
+Interview Questions – Exercise 4 (Merge Conflicts)
+Merge Conflict Basics
+What is a merge conflict?
+Why do merge conflicts occur?
+Can Git always merge branches automatically?
+Why doesn't Git automatically choose one version during a conflict?
+Is a merge conflict an error or a safety mechanism?
+Three-Way Merge
+What is a Three-Way Merge?
+What are the three inputs used in a Three-Way Merge?
+What is the Common Ancestor?
+Why is the Common Ancestor important?
+How does Git determine whether a conflict exists?
+Conflict Scenarios
+What is an add/add conflict?
+What is a modify/modify conflict?
+What is a modify/delete conflict?
+Can conflicts occur when different files are modified?
+Can conflicts occur if two developers modify different lines of the same file?
+Conflict Markers
+What does <<<<<<< HEAD mean?
+What does ======= mean?
+What does >>>>>>> GitWork mean?
+Why are conflict markers inserted?
+Should conflict markers remain after resolving a conflict?
+HEAD
+What is HEAD?
+Is HEAD a branch?
+What does HEAD point to?
+What happens to HEAD when switching branches?
+What is a detached HEAD?
+Current vs Incoming Changes
+What is the Current Change?
+What is the Incoming Change?
+If you execute git merge GitWork while on main, which branch is the Current Change?
+If you execute git merge main while on GitWork, which branch becomes the Incoming Change?
+Resolving Conflicts
+How do you resolve a merge conflict?
+What should be done after editing the conflicted file?
+Why do we execute git add after resolving conflicts?
+Why is another commit required after conflict resolution?
+Merge Commit
+What is a Merge Commit?
+How is a Merge Commit different from a normal commit?
+Why does a Merge Commit have two parent commits?
+When is a Merge Commit created?
+When is a Merge Commit not created (Fast-Forward Merge)?
+Git Log
+Explain:
+git log --oneline --graph --decorate --all
+What does --graph display?
+What does --decorate display?
+Why use --all?
+Branch Cleanup
+Why delete merged branches?
+Difference between git branch -d and git branch -D.
+Are commits lost after deleting a merged branch?
+Scenario-Based Questions
+Two developers modify the same file. What happens during merge?
+Why did Git stop and ask you to resolve a conflict?
+How would you explain merge conflicts to a beginner?
+How would you resolve a conflict using VS Code?
+Explain the complete conflict resolution workflow from branch creation to merge commit.
+⭐ Most Frequently Asked Git Interview Questions (Merge Conflicts)
+
+If you have only 20 minutes before an interview, revise these first:
+
+What is a merge conflict?
+Why do merge conflicts occur?
+What is a Three-Way Merge?
+What is the Common Ancestor?
+What is HEAD?
+What do <<<<<<<, =======, and >>>>>>> mean?
+What is the difference between Current Change and Incoming Change?
+How do you resolve a merge conflict?
+Why do we run git add after resolving a conflict?
+What is a Merge Commit?
+Difference between a Merge Commit and a Fast-Forward Merge.
+Explain git log --oneline --graph --decorate --all.
+What is an add/add conflict?
+What is a modify/modify conflict?
+Explain the complete merge conflict workflow from start to finish.

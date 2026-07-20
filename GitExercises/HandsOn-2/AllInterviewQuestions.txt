@@ -1,0 +1,98 @@
+Exercise 2: .gitignore
+Basics
+1. What is .gitignore?
+2. Why do we need .gitignore?
+3. What types of files are generally ignored?
+4. What happens if we don't use .gitignore?
+.gitignore File
+5. Why is the .gitignore file itself committed?
+6. What happens if .gitignore is not committed?
+7. Does every developer need the same .gitignore?
+8. Is .gitignore project-specific?
+Ignore Rules
+9. What does
+*.log
+
+mean?
+
+10. What does
+log/
+
+mean?
+
+11. Difference between
+log
+
+and
+
+log/
+12. How do you ignore all .class files?
+13. How do you ignore all .exe files?
+14. How do you ignore an entire directory?
+Git Status
+15. Why didn't app.log appear in git status?
+16. Does git status show ignored files?
+17. How does Git know which files to ignore?
+18. Can Git ignore files automatically?
+Tracked vs Ignored
+19. What is the difference between
+Tracked
+Untracked
+Ignored
+20. Does .gitignore affect already tracked files?
+21. Why doesn't .gitignore stop Git from tracking previously committed files?
+22. How do you stop tracking an already committed file?
+23. Purpose of
+git rm --cached
+Wildcards
+24. What is a wildcard?
+25. Explain
+*.log
+26. Explain
+temp/
+27. Explain
+*.class
+28. Can .gitignore ignore multiple file extensions?
+Best Practices
+29. Should log files be committed?
+30. Should build folders be committed?
+31. Should IDE configuration files be committed?
+32. Why shouldn't temporary files be committed?
+33. What files are usually ignored in Java projects?
+34. What files are usually ignored in Node.js projects?
+35. What files are usually ignored in Python projects?
+Practical Questions
+36. Create a .gitignore to ignore:
+All log files
+All class files
+node_modules
+build
+.idea
+37. What happens when a new .log file is created?
+38. What happens if you delete .gitignore?
+39. Can multiple .gitignore files exist in one repository?
+40. How do you verify whether Git is ignoring a file?
+⭐ Most Frequently Asked Git Interview Questions
+
+If you have only 30 minutes before an interview, prioritize these:
+
+What is Git?
+Difference between Git and GitHub.
+What is a repository?
+What is the .git folder?
+Explain the Git workflow.
+What is the Working Directory?
+What is the Staging Area?
+What is a commit?
+Difference between git add and git commit.
+Purpose of git status.
+Difference between tracked and untracked files.
+Difference between git fetch and git pull.
+Difference between git pull and git push.
+What is origin?
+What is an upstream branch?
+Why do we use git push -u origin main?
+What is .gitignore?
+Why should .gitignore be committed?
+Difference between tracked, untracked, and ignored files.
+What is git rm --cached used for?

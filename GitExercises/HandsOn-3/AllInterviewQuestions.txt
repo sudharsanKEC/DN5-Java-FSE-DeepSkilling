@@ -1,0 +1,111 @@
+Exercise 3 (Branching & Merging)
+Git Branching Basics
+What is a branch in Git?
+Why do we use branches?
+What are the advantages of branching?
+What is the default branch in Git?
+Difference between master and main.
+Can multiple branches exist in one repository?
+Does creating a branch duplicate the entire project?
+Branch Creation
+How do you create a new branch?
+
+Difference between:
+
+git branch feature
+
+and
+
+git switch -c feature
+Difference between git checkout -b and git switch -c.
+What happens internally when a branch is created?
+HEAD
+What is HEAD?
+What happens to HEAD when switching branches?
+Why is HEAD important?
+Switching Branches
+How do you switch between branches?
+What happens if there are uncommitted changes while switching branches?
+Can Git prevent branch switching?
+Branch Listing
+Difference between:
+git branch
+
+and
+
+git branch -a
+What does the * symbol indicate?
+Branch Comparison
+What does git diff do?
+How do you compare two branches?
+Difference between CLI diff and visual diff.
+What tools can be used for visual comparison?
+Why does VS Code show /dev/null while comparing?
+Merge
+What is merging?
+Why do we merge branches?
+How do you merge a branch?
+What happens internally during merge?
+What is a Fast-Forward Merge?
+When does Fast-Forward Merge happen?
+What is a Merge Commit?
+Difference between Fast-Forward Merge and Merge Commit.
+Can Git merge automatically?
+When does Git produce merge conflicts?
+Merge Conflicts
+What is a merge conflict?
+Why do merge conflicts occur?
+How do you resolve merge conflicts?
+What happens if two developers modify the same line?
+Commit Graph
+What does:
+git log --oneline --graph --decorate
+
+display?
+40. Why is --graph useful?
+41. What does --decorate show?
+
+Branch Deletion
+How do you delete a branch?
+Difference between:
+git branch -d
+
+and
+
+git branch -D
+Can you delete the current branch?
+Are commits deleted after deleting a merged branch?
+GitLab
+What is a Merge Request?
+Difference between Merge and Merge Request.
+Why are Merge Requests used in teams?
+What is a Branch Request?
+Can a Merge Request be reviewed before merging?
+Scenario-Based Questions
+Explain the complete branching workflow from creating a branch to merging it.
+Why should developers avoid working directly on main?
+A teammate asks you to implement a new feature. What Git workflow would you follow?
+You accidentally committed changes to the wrong branch. What would you do?
+You deleted a branch after merging. Is the merged code still available?
+⭐ Most Frequently Asked Branching Interview Questions
+
+If you have only 20–30 minutes to revise, prioritize these:
+
+What is a Git branch?
+Why are branches used?
+How do you create and switch branches?
+What is HEAD?
+What happens internally when a branch is created?
+Difference between git branch and git switch.
+How do you compare two branches?
+What is git diff?
+What is merging?
+What is a Fast-Forward Merge?
+What is a Merge Commit?
+What is a merge conflict?
+How do you resolve merge conflicts?
+What does git log --oneline --graph --decorate show?
+Difference between git branch -d and git branch -D.
+What is a Merge Request in GitLab?
+Why shouldn't developers commit directly to main?
+Explain the complete branching and merging workflow from start to finish.
