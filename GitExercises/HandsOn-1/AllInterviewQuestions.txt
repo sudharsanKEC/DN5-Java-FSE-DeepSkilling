@@ -1,0 +1,122 @@
+Exercise 1: Git Configuration & Repository Initialization
+
+Git Basics
+1. What is Git?
+2. What is Version Control?
+3. Why do we use Git?
+4. What is the difference between Git and GitHub/GitLab?
+5. What is a Git repository?
+6. What is the difference between a Local Repository and a Remote Repository?
+7. What is contained inside the .git folder?
+8. Why is the .git folder hidden?
+9. Can a Git repository exist without GitHub or GitLab?
+
+Git Installation & Configuration
+10. How do you verify whether Git is installed?
+11. Why do we configure user.name?
+12. Why do we configure user.email?
+13. Does Git verify whether the configured email actually exists?
+14. Where are Git's global configurations stored?
+15. What is the difference between global and local Git configuration?
+16. How do you view all Git configurations?
+
+Repository Initialization
+17. What does git init do?
+18. What is created after executing git init?
+19. What is the purpose of the .git folder?
+20. Difference between:
+git init
+and
+git init GitDemo
+21. Can you convert an existing folder into a Git repository?
+Working Directory Concepts
+22. What is the Working Directory?
+23. What is the Staging Area?
+24. What is the Local Repository?
+25. What is the difference between these three?
+Working Directory
+Staging Area
+Local Repository
+26. Explain the complete Git workflow.
+Git Status
+27. What is the purpose of git status?
+28. What information does git status display?
+29. What does "Working tree clean" mean?
+30. What does "nothing to commit" mean?
+31. What are Untracked Files?
+32. What are Tracked Files?
+33. What are Modified Files?
+34. What are Staged Files?
+
+Git Add
+35. What does git add do?
+36. Does git add copy the file?
+37. Does git add move the file?
+38. Difference between:
+git add file.txt
+
+and
+
+git add .
+39. Can git add be used multiple times before committing?
+Commit
+40. What is a commit?
+41. Why do we commit changes?
+42. What information is stored inside a commit?
+43. What is the purpose of a commit message?
+44. Difference between
+git commit
+
+and
+
+git commit -m
+Remote Repository
+45. What is a remote repository?
+46. What does
+git remote add origin URL
+
+do?
+
+47. Is "origin" a keyword?
+48. Can we use another name instead of "origin"?
+49. How do you view configured remotes?
+50. Where does Git store remote information?
+Fetch / Pull / Push
+51. Difference between git fetch and git pull.
+52. Does git fetch modify the Working Directory?
+53. Where are fetched commits stored?
+54. What does git pull actually perform internally?
+55. What is FETCH_HEAD?
+56. Why did we use
+--allow-unrelated-histories
+57. What caused the "refusing to merge unrelated histories" error?
+58. What does git push do?
+59. Difference between
+git push
+git push origin
+git push origin main
+Upstream
+60. What is an upstream branch?
+61. Why do we use
+git push -u origin main
+62. What does the -u option mean?
+63. Why can we use git push after configuring upstream?
+64. Does upstream refer to the remote repository or a remote branch?
+Branch Naming
+65. Why was
+git branch -M main
+
+used?
+
+66. Difference between master and main.
+Editor
+67. Why configure Notepad++ as Git's default editor?
+68. When does Git open the default editor?
+69. Can VS Code be configured as the default Git editor?
+Scenario-Based Questions
+70. How do you create a local repository and connect it to GitLab?
+71. What happens when you execute git init?
+72. What happens when you execute git add?
+73. What happens when you execute git commit?
+74. What happens when you execute git push?
+75. Explain the entire Git workflow from creating a project to pushing it to GitLab.
